@@ -1,30 +1,33 @@
 import React from "react";
 
 // reactstrap components
-import { Container } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 
-import {Box} from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
 // core components
 import { Link as ScrollLink } from "react-scroll";
 
 function EquipeHeader() {
     return (
-        <>
-            <Box display="flex">
-                <Box flex={1} className="page-header section-dark"
-                    style={{
-                        backgroundImage:
-                            "url(" + require("assets/img/bg-header-02.webp") + ")",
-                        backgroundSize: 'cover',
-                    }}>
+        <div style={{ maxWidth: '100%' }}>
+            <Container>
 
-                </Box>
-                <Box flex={1} style={{backgroundColor: 'white'}}>
+                <Row>
+                    <Col md={6} className="page-header section-dark"
+                        style={{
+                            backgroundImage:
+                                "url(" + require("assets/img/bg-header-02.webp") + ")",
+                            backgroundSize: 'cover',
+                        }}>
 
-                </Box>
-            </Box>
-             </>
+                    </Col>
+                    <Col md={6} style={{ backgroundColor: 'white' }}>
+
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
 }
 

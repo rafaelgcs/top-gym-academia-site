@@ -99,7 +99,7 @@ function EquipeNavbar() {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink to="/galeria" tag={Link}>
+              <NavLink to="/gallery" tag={Link}>
                 <i className="fas fa-images" /> Galeria
               </NavLink>
             </NavItem>

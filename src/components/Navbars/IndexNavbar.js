@@ -110,13 +110,14 @@ function IndexNavbar() {
               </NavLink>
               </Link>
             </NavItem>
-            <NavItem className="lg-none">
+            <NavItem className="d-none d-md-block">
               <ScrollLink
                 to="pricing"
                 spy={true}
                 smooth={true}
                 offset={-70}
                 duration={500}
+                onClick={toggleNavbarCollapse}
               >
                 <NavLink
                   data-placement="bottom"
@@ -127,6 +128,16 @@ function IndexNavbar() {
                 Planos
               </NavLink>
               </ScrollLink>
+            </NavItem>
+            <NavItem className="d-block d-md-none">
+            <NavLink
+                data-placement="bottom"
+                href="/#pricing"
+                title="Nossos Horários"
+              >
+                <i className="fas fa-money-check-alt d-lg-none" />
+                Planos
+              </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
@@ -141,7 +152,7 @@ function IndexNavbar() {
             <NavItem>
               <NavLink
                 data-placement="bottom"
-                href="#"
+                href="/gallery"
                 title="Nossa Galeria"
               >
                 <i className="far fa-images d-lg-none" /> Galeria
@@ -150,7 +161,7 @@ function IndexNavbar() {
             <NavItem>
               <NavLink
                 data-placement="bottom"
-                href="https://www.instagram.com/"
+                href="https://www.instagram.com/topgymacademia"
                 target="_blank"
                 title="Siga-nos no Instagram"
               >
