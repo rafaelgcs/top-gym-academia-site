@@ -21,7 +21,9 @@ function IndexHeader() {
         <div className="content-center">
           <Container>
             <div className="title-brand">
-              <h1 className="presentation-title">Logo</h1>
+              <h1 className="presentation-title">
+                <img alt="..." height='270px' src={require("assets/img/logo-270x270.png")} />
+              </h1>
               {/* <div className="fog-low">
                 <img alt="..." src={require("assets/img/fog-low.png")} />
               </div> */}

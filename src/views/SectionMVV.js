@@ -2,12 +2,10 @@ import React from 'react';
 
 // reactstrap components
 import {
-    Button,
     Container,
     Row,
     Col
 } from "reactstrap";
-import { Box } from '@material-ui/core';
 
 const SectionMVV = () => {
     return (

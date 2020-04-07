@@ -1,122 +1,91 @@
 import React, { useState, useCallback } from 'react';
-import EquipeNavbar from 'components/Navbars/EquipeNavbar';
-import EquipeHeader from 'components/Headers/EquipeHeader';
 
-
-import {
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    CardTitle,
-    Form,
-    Input,
-    InputGroupAddon,
-    InputGroupText,
-    InputGroup,
-    Container,
-    Row,
-    Col
-} from "reactstrap";
-import { Box } from '@material-ui/core';
-import IndexFooter from 'components/Footers/IndexFooter';
-import api from 'services/api';
+import { Container } from "reactstrap";
+// import api from 'services/api';
 import Gallery from 'react-photo-gallery';
 import Carousel, { Modal, ModalGateway } from "react-images";
 import GalleryHeader from 'components/Headers/GalleryHeader';
 import NavbarLinks from 'components/Navbars/NavbarLinks';
 import DefaultNavbar from 'components/Navbars/DefaultNavbar';
+import DefaultFooter from 'components/Footers/DefaultFooter';
+import ScrollToTopOnMount from 'views/ScrollToTopOnMount';
 
 
 const photos = [
     {
-        src: "https://source.unsplash.com/2ShvY8Lf6l0/800x599",
+        src: require('assets/img/all/001.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/Dm-qxdynoEc/800x799",
-        width: 1,
-        height: 1
-    },
-    {
-        src: "https://source.unsplash.com/qDkso9nvCg0/600x799",
-        width: 3,
-        height: 4
-    },
-    {
-        src: "https://source.unsplash.com/iecJiKe_RNg/600x799",
-        width: 3,
-        height: 4
-    },
-    {
-        src: "https://source.unsplash.com/epcsn8Ed8kY/600x799",
-        width: 3,
-        height: 4
-    },
-    {
-        src: "https://source.unsplash.com/NQSWvyVRIJk/800x599",
+        src: require('assets/img/all/002.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/zh7GEuORbUw/600x799",
-        width: 3,
-        height: 4
-    },
-    {
-        src: "https://source.unsplash.com/PpOHJezOalU/800x599",
+        src: require('assets/img/all/003.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/I1ASdgphUH4/800x599",
+        src: require('assets/img/all/004.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/XiDA78wAZVw/600x799",
-        width: 3,
-        height: 4
-    },
-    {
-        src: "https://source.unsplash.com/x8xJpClTvR0/800x599",
+        src: require('assets/img/all/005.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/u9cG4cuJ6bU/4927x1000",
-        width: 4927,
-        height: 1000
-    },
-    {
-        src: "https://source.unsplash.com/qGQNmBE7mYw/800x599",
+        src: require('assets/img/all/006.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/NuO6iTBkHxE/800x599",
+        src: require('assets/img/all/007.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/pF1ug8ysTtY/600x400",
+        src: require('assets/img/all/008.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/A-fubu9QJxE/800x533",
+        src: require('assets/img/all/009.jpg'),
         width: 4,
         height: 3
     },
     {
-        src: "https://source.unsplash.com/5P91SF0zNsI/740x494",
+        src: require('assets/img/all/010.jpg'),
         width: 4,
         height: 3
-    }
+    },
+    {
+        src: require('assets/img/all/011.jpg'),
+        width: 4,
+        height: 3
+    },
+    {
+        src: require('assets/img/all/012.jpg'),
+        width: 4,
+        height: 3
+    },
+    {
+        src: require('assets/img/all/013.jpg'),
+        width: 4,
+        height: 3
+    },
+    {
+        src: require('assets/img/all/014.jpg'),
+        width: 4,
+        height: 3
+    },
 ];
 
 const GalleryPage = (props) => {
+    const [imageTop, setImageTop] = useState(<img alt="Top Gym Academia - Logo" src={require('assets/img/logo-50x-black.png')} />);
     const [currentImage, setCurrentImage] = useState(0);
     const [viewerIsOpen, setViewerIsOpen] = useState(false);
 
@@ -150,8 +119,9 @@ const GalleryPage = (props) => {
 
     return (
         <div>
+            <ScrollToTopOnMount />
             <DefaultNavbar
-                brand="Top Gym Academia"
+                brand={imageTop}
                 rightLinks={<NavbarLinks />}
                 fixed
                 // color="transparent"
@@ -183,7 +153,7 @@ const GalleryPage = (props) => {
                 </Container>
 
             </div>
-            <IndexFooter />
+            <DefaultFooter />
         </div>
     );
 }

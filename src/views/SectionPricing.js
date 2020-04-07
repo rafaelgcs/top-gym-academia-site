@@ -1,7 +1,6 @@
 import React from 'react';
-import { Box,Button, Card, CardActions, CardContent, CardHeader, CssBaseline, Grid, Typography, Container, Paper } from '@material-ui/core';
+import { Box, CssBaseline, Container } from '@material-ui/core';
 import { Button as RSButton, Row, Col } from 'reactstrap';
-import StarIcon from '@material-ui/icons/StarBorder';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -55,43 +54,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const tiers = [
-    {
-        title: 'Diária',
-        price: '0',
-        description: ['Descrição do produto'],
-        buttonText: 'Fale Conosco',
-        buttonVariant: 'outlined',
-    },
-    {
-        title: 'Mensal',
-        subheader: 'Mais Popular',
-        price: '15',
-        description: [
-            'Descrição do produto'
-        ],
-        buttonText: 'Fale Conosco',
-        buttonVariant: 'contained',
-    },
-    {
-        title: 'Anual',
-        price: '30',
-        description: ['Descrição do produto'],
-        buttonText: 'Fale Conosco',
-        buttonVariant: 'outlined',
-    },
-];
-
-const tier = {
-    title: 'Anual',
-    price: '30',
-    description: ['Descrição do produto'],
-    buttonText: 'Fale Conosco',
-    buttonVariant: 'outlined',
-};
-
-const imagemPlano = require("assets/img/bg-header-01.jpg");
-
 const SectionPricing = () => {
     const classes = useStyles();
 
@@ -104,16 +66,16 @@ const SectionPricing = () => {
                         <Col md={6}>
                             <h2 style={{ fontSize: 28, marginBottom: -25 }}>Seja nosso aluno, matricule-se já!</h2>
                             <h2 className="title" style={{ fontSize: 60 }}>Faça parte da linha <span style={{ color: 'green', fontWeight: 'bold' }}>TOP SLIM!</span></h2>
-                            <h2 className="title" style={{ fontSize: 70 }}>R$ 140,00<span style={{ fontSize: 20 }}>/MÊS</span></h2>
+                            <h2 className="title" style={{ fontSize: 70 }}>R$ --,--<span style={{ fontSize: 20 }}>/MÊS</span></h2>
                             {/* <p className="description">
                                 Textinho breve sobre os eventos
                             </p> */}
                             <Box>
                                 <RSButton
-                                    style={{paddingLeft: 40, paddingRight: 40, paddingTop: 15, paddingBottom: 15 }}
+                                    style={{ paddingLeft: 40, paddingRight: 40, paddingTop: 15, paddingBottom: 15 }}
                                     className="btn-round"
                                     color="success"
-                                    href="#"
+                                    href="tel:71981213612"
                                 >
                                     COMPRE JÁ!
                                 </RSButton>
@@ -123,7 +85,7 @@ const SectionPricing = () => {
                             {/* <Paper elevation={5} style={{borderRadius: 10}}> */}
 
                             {/* <img width="100%" style={{borderRadius: 10}} src={imagemPlano} /> */}
-                            <img className="d-none d-md-block" width="100%" src="https://blog.queimadiaria.com/wp-content/uploads/2016/04/alongamento-mulher-alongando-pernas-e-bracos-barakat.jpg" />
+                            <img alt="" className="d-none d-md-block" width="100%" src={require('assets/img/pricing.png')} />
                             {/* </Paper> */}
 
                         </Col>

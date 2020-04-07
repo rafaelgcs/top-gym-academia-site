@@ -27,7 +27,7 @@ const HomeNavbarLinks = (props) => {
     const classes = useStyles();
     return (
         <List className={classes.list}>
-            <ListItem className={classes.listItem}>
+            {/* <ListItem className={classes.listItem}>
                 <Button
                     href="#"
                     color="transparent"
@@ -37,7 +37,7 @@ const HomeNavbarLinks = (props) => {
                 >
                     <CloudDownload className={classes.icons} /> Download
                 </Button>
-            </ListItem>
+            </ListItem> */}
             <ListItem className={classes.listItem}>
                 <Tooltip
                     id="nossa-equipe"

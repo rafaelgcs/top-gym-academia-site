@@ -1,7 +1,5 @@
 /*eslint-disable*/
 import React from "react";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 
@@ -13,7 +11,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
+import { Apps } from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown";
@@ -27,7 +25,7 @@ const NavbarLinks = (props) => {
     const classes = useStyles();
     return (
         <List className={classes.list}>
-            <ListItem className={classes.listItem}>
+            {/* <ListItem className={classes.listItem}>
                 <Button
                     href="#"
                     color="transparent"
@@ -37,7 +35,7 @@ const NavbarLinks = (props) => {
                 >
                     <CloudDownload className={classes.icons} /> Download
                 </Button>
-            </ListItem>
+            </ListItem> */}
             <ListItem className={classes.listItem}>
                 <Tooltip
                     id="nossa-equipe"

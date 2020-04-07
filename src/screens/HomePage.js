@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import IndexNavbar from '../components/Navbars/IndexNavbar';
 import IndexHeader from 'components/Headers/IndexHeader';
-import SectionPricing from 'views/index-sections/SectionPricing';
-import SectionMVV from 'views/index-sections/SectionMVV';
-import SectionSocial from 'views/index-sections/SectionSocial';
-import IndexFooter from 'components/Footers/IndexFooter';
-import SectionNewEvents from 'views/index-sections/SectionNewEvents';
+import SectionPricing from 'views/SectionPricing';
+import SectionMVV from 'views/SectionMVV';
+import SectionSocial from 'views/SectionSocial';
+import ScrollToTopOnMount from 'views/ScrollToTopOnMount';
 import DefaultNavbar from 'components/Navbars/DefaultNavbar';
 import HomeNavbarLinks from 'components/Navbars/HomeNavbarLinks';
+import DefaultFooter from 'components/Footers/DefaultFooter';
 
 const HomePage = (props) => {
     let pageHeader = React.createRef();
+    const [imageTop, setImageTop] = useState(<img alt="Top Gym Academia Logo" src={require('assets/img/logo-50x120-white.png')} />);
     const { ...rest } = props;
 
     React.useEffect(() => {
@@ -31,14 +31,15 @@ const HomePage = (props) => {
 
     return (
         <>
+            <ScrollToTopOnMount />
             <DefaultNavbar
-                brand="Top Gym Academia"
+                brand={imageTop}
                 rightLinks={<HomeNavbarLinks />}
                 fixed
                 color="transparent"
                 changeColorOnScroll={{
                     height: 400,
-                    color: "white"
+                    color: "dark"
                 }}
                 {...rest}
             />
@@ -46,9 +47,9 @@ const HomePage = (props) => {
             <div className="main" id="pricing">
                 <SectionPricing />
                 <SectionMVV />
-                <SectionNewEvents />
+                {/* <SectionNewEvents /> */}
                 <SectionSocial />
-                <IndexFooter />
+                <DefaultFooter />
             </div>
         </>
     );

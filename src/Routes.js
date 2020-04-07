@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import HomePage from "screens/HomePage";
 import EquipePage from "screens/EquipePage";
 import GalleryPage from "screens/GalleryPage";
+import Error404 from "screens/errors/404";
 // others
 
 const Routes = () => {
@@ -16,7 +17,7 @@ const Routes = () => {
                 <Route exact path="/equipe" component={EquipePage} />
                 <Route exact path="/gallery" component={GalleryPage} />
              
-                <Route path="*" component={() => <h1>Page not found</h1>} />
+                <Route path="*" component={Error404} />
             </Switch>
         </BrowserRouter>
     );
