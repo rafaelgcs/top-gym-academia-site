@@ -9,6 +9,7 @@ import NavbarLinks from 'components/Navbars/NavbarLinks';
 import DefaultNavbar from 'components/Navbars/DefaultNavbar';
 import DefaultFooter from 'components/Footers/DefaultFooter';
 import ScrollToTopOnMount from 'views/ScrollToTopOnMount';
+import FloatButton from 'components/CustomButtons/FloatButton';
 
 
 const photos = [
@@ -154,6 +155,7 @@ const GalleryPage = (props) => {
 
             </div>
             <DefaultFooter />
+            <FloatButton />
         </div>
     );
 }

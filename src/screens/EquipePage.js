@@ -15,6 +15,7 @@ import EquipeHeader from 'components/Headers/EquipeHeader';
 import DefaultNavbar from 'components/Navbars/DefaultNavbar';
 import DefaultFooter from 'components/Footers/DefaultFooter';
 import ScrollToTopOnMount from 'views/ScrollToTopOnMount';
+import FloatButton from 'components/CustomButtons/FloatButton';
 
 
 const EquipePage = (props) => {
@@ -635,6 +636,7 @@ const EquipePage = (props) => {
                 </Row>
             </Col>
             <DefaultFooter />
+            <FloatButton />
         </div>
     );
 }
