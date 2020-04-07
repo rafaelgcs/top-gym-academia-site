@@ -96,11 +96,12 @@ const NavbarLinks = (props) => {
                 >
                     <Button
                         color="transparent"
-                        href="https://www.facebook.com/TPGAcademy"
+                        href="https://www.facebook.com/TPGAcademia"
                         target="_blank"
                         className={classes.navLink}
                     >
                         <i className={classes.socialIcons + " fab fa-facebook"} />
+                        <span className="d-block d-md-none">Facebook</span>
                     </Button>
                 </Tooltip>
             </ListItem>
@@ -118,6 +119,7 @@ const NavbarLinks = (props) => {
                         className={classes.navLink}
                     >
                         <i className={classes.socialIcons + " fab fa-instagram"} />
+                        <span className="d-block d-md-none">Instagram</span>
                     </Button>
                 </Tooltip>
             </ListItem>

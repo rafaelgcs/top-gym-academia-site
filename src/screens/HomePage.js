@@ -8,12 +8,12 @@ import ScrollToTopOnMount from 'views/ScrollToTopOnMount';
 import DefaultNavbar from 'components/Navbars/DefaultNavbar';
 import HomeNavbarLinks from 'components/Navbars/HomeNavbarLinks';
 import DefaultFooter from 'components/Footers/DefaultFooter';
+import FloatButton from 'components/CustomButtons/FloatButton';
 
 const HomePage = (props) => {
     let pageHeader = React.createRef();
     const [imageTop, setImageTop] = useState(<img alt="Top Gym Academia Logo" src={require('assets/img/logo-50x120-white.png')} />);
     const { ...rest } = props;
-
     React.useEffect(() => {
         if (window.innerWidth < 991) {
             const updateScroll = () => {
@@ -51,6 +51,7 @@ const HomePage = (props) => {
                 <SectionSocial />
                 <DefaultFooter />
             </div>
+            <FloatButton />
         </>
     );
 }
