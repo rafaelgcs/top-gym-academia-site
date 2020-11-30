@@ -1,7 +1,11 @@
 import axios from "axios";
 
-const api = axios.create({
+const apiInsta = axios.create({
   baseURL: "https://graph.instagram.com"
 });
 
-export default api;
+const api = axios.create({
+  baseUrl: "https://localhost:8080"
+})
+
+export { apiInsta, api };

@@ -2,20 +2,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // styles
-import "assets/css/bootstrap.min.css";
+import "modules/shared/assets/css/bootstrap.min.css";
 import "assets/scss/paper-kit.scss";
-import "assets/demo/demo.css";
-import App from './App';
+import "modules/shared/assets/demo/demo.css";
+import { BrowserRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
+import App from './App';
 
-ReactDOM.render(
+ReactDOM.render((
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+), document.getElementById('root'));
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
