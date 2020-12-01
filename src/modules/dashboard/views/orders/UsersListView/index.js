@@ -9,7 +9,7 @@ import {
 import Page from '../../../components/Page';
 import Results from './Results';
 import Toolbar from './Toolbar';
-import { apiAuth } from 'modules/dashboard/views/clients/UsersListView/node_modules/services/api';
+import { apiAuth, refreshToken } from 'modules/dashboard/views/clients/UsersListView/node_modules/services/api';
 import AddUserDialog from '../dialogs/AddUser';
 import ShowUserDialog from '../dialogs/ShowUser';
 
@@ -61,6 +61,10 @@ const UsersListView = () => {
         if (res.success) {
           setUsers(res.data)
         }
+      }
+    }).catch(error => {
+      if (error.response.status === 401) {
+        refreshToken()
       }
     }).finally(() => {
       setLoading(false)

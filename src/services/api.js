@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from './auth';
+import { getToken, logout, refresh } from './auth';
 
 const URL = process.env.REACT_APP_URL_API;
 
@@ -25,4 +25,16 @@ const apiAuth = axios.create({
   }
 });
 
-export { apiInsta, api, apiAuth };
+const refreshToken = async () => {
+  await apiAuth.post('auth/refresh/admin').then((response) => {
+    if (response.status === 200) {
+      refresh(response.data.data.access_token, response.data.data.expires_in)
+    }
+  }).catch(error => {
+    if (logout()) {
+      window.location.href = "/admin"
+    }
+  })
+}
+
+export { apiInsta, api, apiAuth, refreshToken };

@@ -53,7 +53,7 @@ const items = [
     title: 'Usuários'
   },
   {
-    href: '/admin/customers',
+    href: '/admin/clients',
     icon: UsersIcon,
     title: 'Clientes'
   },

@@ -8,15 +8,61 @@ import {
     DialogActions,
     TextField,
     Grid,
-    InputAdornment
+    InputAdornment,
+    Card,
+    CardContent,
+    Box,
+    Container
 } from '@material-ui/core'
-import { apiAuth } from 'services/api'
+import { apiAuth, refreshToken } from 'services/api'
 import { Dropzone } from 'modules/shared/components/Dropzone'
+import '../styles/hideArrowsSlider.css'
+import Slider from 'react-slick'
+
+const defaultProductImage = require('../../../../shared/assets/img/default-product.png')
+
+const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    nextArrow: <div style={{display: 'none'}} />,
+    prevArrow: <div style={{display: 'none'}} />,
+    initialSlide: 0,
+    responsive: [
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                infinite: false,
+                dots: false
+            }
+        },
+        {
+            breakpoint: 600,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+            }
+        },
+        {
+            breakpoint: 480,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+            }
+        }
+    ]
+};
 
 const ShowProductDialog = (props) => {
-    const { openDialogShowProduto, product, handleChangeShowProduto, PaperComponent } = props
+    const { openDialogShowProduto, product, handleChangeShowProduto, resetTable, PaperComponent } = props
     const [categories, setCategories] = useState([])
     const [files, setFiles] = useState([])
+    const [qtdTotal, setQtdTotal] = useState(0)
+    const [qtdDisponivel, setQtdDisponivel] = useState(0)
     const extensionsAccepted = ['png', 'jpg', 'jpeg', 'gif']
 
     const [newProduct, setNewProduct] = useState({
@@ -41,55 +87,75 @@ const ShowProductDialog = (props) => {
         });
     };
 
-    const verifyInputs = () => {
-        if (
-            (newProduct.nome != null && newProduct.nome != "") &&
-            (newProduct.apelido != null && newProduct.apelido != "") &&
-            (newProduct.valor != null && newProduct.valor != "") &&
-            (newProduct.valor_promocional != null && newProduct.valor_promocional != "") &&
-            (newProduct.tamanho != null && newProduct.tamanho != "") &&
-            (newProduct.categoria_id != null && newProduct.categoria_id != "")
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // const verifyInputs = () => {
+    //     if (
+    //         (newProduct.nome != null && newProduct.nome != "") &&
+    //         (newProduct.apelido != null && newProduct.apelido != "") &&
+    //         (newProduct.valor != null && newProduct.valor != "") &&
+    //         (newProduct.valor_promocional != null && newProduct.valor_promocional != "") &&
+    //         (newProduct.tamanho != null && newProduct.tamanho != "") &&
+    //         (newProduct.categoria_id != null && newProduct.categoria_id != "")
+    //     ) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     const onSubmitForm = () => {
-        if (verifyInputs()) {
-            apiAuth.put(`/product/${product.id}`, newProduct).then(response => {
-                if (files.length > 0) {
-                    sendImages(response.data)
-                } else {
-                    alert("Produto atualizado com êxito!")
-                    handleChangeShowProduto()
-                }
-            }).catch(error => {
-                console.log("erro", error)
-            })
-        } else {
-            alert("Favor preencher todos os campos obrigatórios do formulário!")
+        apiAuth.put(`/product/${product.id}`, newProduct).then(response => {
+            updateStock(response.data)
+        }).catch(error => {
+            console.log("erro", error)
+            if (error.response.status === 401) {
+                refreshToken()
+            }
+        })
+    }
+
+    const updateStock = (product) => {
+        let stock = {
+            quantidade_total: qtdTotal,
+            quantidade_disponivel: qtdDisponivel
         }
+        apiAuth.put(`stock/${product.id}`, stock).then(response => {
+            sendImages(product)
+        }).catch(error => {
+            console.log("erro", error)
+            if (error.response.status === 401) {
+                refreshToken()
+            }
+        })
+
     }
 
     const sendImages = (product) => {
 
-        files.map(file => {
-            let form = new FormData();
-            form.append('image', file)
+        if (files.length > 0) {
+            files.map(file => {
+                let form = new FormData();
+                form.append('image', file)
 
-            apiAuth.post(`product/${product.id}/image`, form, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            }).then((response) => {
-                alert("Imagens Enviadas Com Sucesso!")
-                handleChangeShowProduto()
-            }).catch(error => {
-                console.log("erro", error)
+                apiAuth.post(`product/${product.id}/image`, form, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }).then((response) => {
+                    alert("Imagens Enviadas Com Sucesso!")
+                    resetTable()
+                    handleChangeShowProduto()
+                }).catch(error => {
+                    console.log("erro", error)
+                    if (error.response.status === 401) {
+                        refreshToken()
+                    }
+                })
             })
-        })
+        } else {
+            alert("Produto atualizado com sucesso!")
+            resetTable()
+            handleChangeShowProduto()
+        }
     }
 
     useEffect(() => {
@@ -103,6 +169,9 @@ const ShowProductDialog = (props) => {
                 }
             }).catch(error => {
                 console.log("ERRO", error)
+                if (error.response.status === 401) {
+                    refreshToken()
+                }
             })
         }
 
@@ -124,6 +193,11 @@ const ShowProductDialog = (props) => {
             largura: product.largura,
             profundidade: product.profundidade
         })
+        if (product.estoque) {
+            setQtdDisponivel(product.estoque.quantidade_disponivel)
+            setQtdTotal(product.estoque.quantidade_total)
+        }
+        setFiles([])
     }, [product])
 
     return (
@@ -140,6 +214,27 @@ const ShowProductDialog = (props) => {
                 Exibição do Produto - {product.nome}
             </DialogTitle>
             <DialogContent dividers={true}>
+                <Container>
+                    <Slider {...settings} className="mb-5">
+                        {product.images && product.images.map((imagem) => {
+                            return (
+                                <div style={{ padding: 5 }}>
+                                    <Card style={{ borderRadius: 15 }} elevation={0}>
+                                        <CardContent>
+                                            <Box
+                                                display="flex"
+                                                justifyContent="center"
+                                            >
+                                                <img width={'100%'} style={{ borderRadius: 15 }} src={imagem.image_url ? imagem.image_url : defaultProductImage} />
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            )
+                        })}
+                    </Slider>
+
+                </Container>
                 <Grid
                     container
                     spacing={3}
@@ -313,6 +408,42 @@ const ShowProductDialog = (props) => {
                                 {"Não"}
                             </option>
                         </TextField>
+                    </Grid>
+                    <Grid item md={12} xs={12}>
+                        <p>Estoque</p>
+                    </Grid>
+                    <Grid
+                        item
+                        md={6}
+                        xs={12}
+                    >
+                        <TextField
+                            fullWidth
+                            label="Quantidade Total"
+                            name="qtdTotal"
+                            onChange={(ev) => setQtdTotal(ev.target.value)}
+                            required
+                            value={qtdTotal}
+                            variant="outlined"
+                        />
+                    </Grid>
+                    <Grid
+                        item
+                        md={6}
+                        xs={12}
+                    >
+                        <TextField
+                            fullWidth
+                            label="Quantidade Disponível"
+                            name="qtdDisponivel"
+                            onChange={(ev) => setQtdDisponivel(ev.target.value)}
+                            required
+                            value={qtdDisponivel}
+                            variant="outlined"
+                        />
+                    </Grid>
+                    <Grid item md={12} xs={12}>
+                        <p>Medidas</p>
                     </Grid>
                     <Grid
                         item

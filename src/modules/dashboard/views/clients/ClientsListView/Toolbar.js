@@ -24,10 +24,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ searchUser, handleChange, handleCloseAddUser, resetPage, className, ...rest }) => {
+const Toolbar = ({ searchClient, handleChange, resetPage, className, ...rest }) => {
   const classes = useStyles();
 
-  const [search, setSearch] = useState(searchUser)
+  const [search, setSearch] = useState(searchClient)
   const doneTyping = () => {
     handleChange({ target: { value: search } })
   }
@@ -53,13 +53,6 @@ const Toolbar = ({ searchUser, handleChange, handleCloseAddUser, resetPage, clas
         <Button onClick={resetPage} className={classes.exportButton}>
           Recarregar Página
         </Button>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={handleCloseAddUser}
-        >
-          Novo Usuário
-        </Button>
       </Box>
       <Box mt={3}>
         <Card>
@@ -83,7 +76,7 @@ const Toolbar = ({ searchUser, handleChange, handleCloseAddUser, resetPage, clas
                       </InputAdornment>
                     )
                   }}
-                  placeholder="Buscar usuário"
+                  placeholder="Buscar cliente"
                   variant="outlined"
                   value={search}
                   onChange={onChange}

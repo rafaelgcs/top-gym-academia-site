@@ -14,7 +14,7 @@ import CategoryCard from './CategoryCard';
 import data from './data';
 import Draggable from 'react-draggable';
 import AddProductDialog from '../dialogs/AddCategory';
-import { apiAuth } from 'services/api';
+import { apiAuth, refreshToken } from 'services/api';
 import AddCategoryDialog from '../dialogs/AddCategory';
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +75,11 @@ const CategoryList = () => {
             }
           }
         }
-      }).finally(() => {
+      }).catch((error => {
+        if (error.response.status === 401) {
+          refreshToken()
+        }
+      })).finally(() => {
         setLoading(false)
       })
     }

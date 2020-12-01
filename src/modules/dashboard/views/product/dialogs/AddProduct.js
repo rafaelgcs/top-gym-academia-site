@@ -10,14 +10,16 @@ import {
     Grid,
     InputAdornment
 } from '@material-ui/core'
-import { apiAuth } from 'services/api'
+import { apiAuth, refreshToken } from 'services/api'
 import { Dropzone } from 'modules/shared/components/Dropzone'
 
 const AddProductDialog = (props) => {
-    const { openDialogAddProduto, handleCloseAddProduto, PaperComponent } = props
+    const { openDialogAddProduto, handleCloseAddProduto, resetTable, PaperComponent } = props
     const [categories, setCategories] = useState([])
     const [files, setFiles] = useState([])
     const extensionsAccepted = ['png', 'jpg', 'jpeg', 'gif']
+    const [qtdTotal, setQtdTotal] = useState(0)
+    const [qtdDisponivel, setQtdDisponivel] = useState(0)
 
     const [newProduct, setNewProduct] = useState({
         nome: null,
@@ -59,33 +61,60 @@ const AddProductDialog = (props) => {
     const onSubmitForm = () => {
         if (verifyInputs()) {
             apiAuth.post('/product', newProduct).then(response => {
-                sendImages(response.data)
-                handleCloseAddProduto()
+                updateStock(response.data)
             }).catch(error => {
                 console.log("erro", error)
+                if (error.response.status === 401) {
+                    refreshToken()
+                }
             })
         } else {
             alert("Favor preencher todos os campos obrigatórios do formulário!")
         }
     }
 
+    const updateStock = (product) => {
+        let stock = {
+            quantidade_total: qtdTotal,
+            quantidade_disponivel: qtdDisponivel
+        }
+        apiAuth.put(`stock/${product.id}`, stock).then(response => {
+            sendImages(product)
+        }).catch(error => {
+            console.log("erro", error)
+            if (error.response.status === 401) {
+                refreshToken()
+            }
+        })
+
+    }
+
     const sendImages = (product) => {
 
-        files.map(file => {
-            let form = new FormData();
-            form.append('image', file)
+        if (files.length > 0) {
 
-            apiAuth.post(`product/${product.id}/image`, form, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            }).then((response) => {
-                alert("Imagens Enviadas Com Sucesso!")
-                handleCloseAddProduto()
-            }).catch(error => {
-                console.log("erro", error)
+            files.map(file => {
+                let form = new FormData();
+                form.append('image', file)
+
+                apiAuth.post(`product/${product.id}/image`, form, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }).then((response) => {
+                    alert("Imagens Enviadas Com Sucesso!")
+                    resetTable()
+                    handleCloseAddProduto()
+                }).catch(error => {
+                    if (error.response.status === 401) {
+                        refreshToken()
+                    }
+                })
             })
-        })
+        } else {
+            resetTable()
+            handleCloseAddProduto()
+        }
     }
 
     useEffect(() => {
@@ -99,6 +128,9 @@ const AddProductDialog = (props) => {
                 }
             }).catch(error => {
                 console.log("ERRO", error)
+                if (error.response.status === 401) {
+                    refreshToken()
+                }
             })
         }
 
@@ -292,6 +324,42 @@ const AddProductDialog = (props) => {
                                 {"Não"}
                             </option>
                         </TextField>
+                    </Grid>
+                    <Grid item md={12} xs={12}>
+                        <p>Estoque</p>
+                    </Grid>
+                    <Grid
+                        item
+                        md={6}
+                        xs={12}
+                    >
+                        <TextField
+                            fullWidth
+                            label="Quantidade Total"
+                            name="qtdTotal"
+                            onChange={(ev) => setQtdTotal(ev.target.value)}
+                            required
+                            value={qtdTotal}
+                            variant="outlined"
+                        />
+                    </Grid>
+                    <Grid
+                        item
+                        md={6}
+                        xs={12}
+                    >
+                        <TextField
+                            fullWidth
+                            label="Quantidade Disponível"
+                            name="qtdDisponivel"
+                            onChange={(ev) => setQtdDisponivel(ev.target.value)}
+                            required
+                            value={qtdDisponivel}
+                            variant="outlined"
+                        />
+                    </Grid>
+                    <Grid item md={12} xs={12}>
+                        <p>Medidas</p>
                     </Grid>
                     <Grid
                         item

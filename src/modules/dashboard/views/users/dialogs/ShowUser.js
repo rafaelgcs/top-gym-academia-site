@@ -10,7 +10,7 @@ import {
     Grid,
     InputAdornment
 } from '@material-ui/core'
-import { apiAuth } from 'services/api'
+import { apiAuth, refreshToken } from 'services/api'
 import Profile from '../../account/AccountView/Profile'
 
 const ShowUserDialog = (props) => {
@@ -66,6 +66,9 @@ const ShowUserDialog = (props) => {
                     }
                 }).catch(error => {
                     console.log("erro", error)
+                    if (error.response.status === 401) {
+                        refreshToken()
+                    }
                 }).finally(() => {
                     handleClose()
                 })

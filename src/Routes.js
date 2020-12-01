@@ -23,6 +23,7 @@ import LandingLayout from 'modules/shared/layouts/landing_layout';
 import { isAuthenticated } from 'services/auth';
 import UsersListView from 'modules/dashboard/views/users/UsersListView';
 import CategoryListView from 'modules/dashboard/views/category/CategoryListView';
+import ClientsListView from 'modules/dashboard/views/clients/ClientsListView';
 
 const routes = [
     { path: 'admin/login', element: isAuthenticated() ? <Navigate to="/admin" /> : <LoginDashboardView /> },
@@ -33,6 +34,7 @@ const routes = [
             { path: '/', element: !isAuthenticated() ? <Navigate to="/admin/login" /> : <DashboardView /> },
             { path: 'account', element: !isAuthenticated() ? <Navigate to="/admin/login" /> : <AccountView /> },
             { path: 'users', element: !isAuthenticated() ? <Navigate to="/admin/login" /> : <UsersListView /> },
+            { path: 'clients', element: !isAuthenticated() ? <Navigate to="/admin/login" /> : <ClientsListView /> },
             { path: 'customers', element: !isAuthenticated() ? <Navigate to="/admin/login" /> : <CustomerListView /> },
             { path: 'products', element: !isAuthenticated() ? <Navigate to="/admin/login" /> : <ProductListView /> },
             { path: 'categories', element: !isAuthenticated() ? <Navigate to="/admin/login" /> : <CategoryListView /> },

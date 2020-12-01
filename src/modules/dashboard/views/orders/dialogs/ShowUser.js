@@ -8,7 +8,7 @@ import {
     TextField,
     Grid,
 } from '@material-ui/core'
-import { apiAuth } from 'modules/dashboard/views/clients/UsersListView/node_modules/services/api'
+import { apiAuth, refreshToken } from 'modules/dashboard/views/clients/UsersListView/node_modules/services/api'
 import Profile from '../../account/AccountView/Profile'
 
 const ShowUserDialog = (props) => {
@@ -64,6 +64,9 @@ const ShowUserDialog = (props) => {
                     }
                 }).catch(error => {
                     console.log("erro", error)
+                    if (error.response.status === 401) {
+                        refreshToken()
+                    }
                 }).finally(() => {
                     handleClose()
                 })

@@ -10,8 +10,7 @@ import Page from '../../../components/Page';
 import Results from './Results';
 import Toolbar from './Toolbar';
 import { apiAuth, refreshToken } from 'services/api';
-import AddUserDialog from '../dialogs/AddUser';
-import ShowUserDialog from '../dialogs/ShowUser';
+import ShowClientDialog from '../dialogs/ShowClient';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,44 +21,39 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const UsersListView = () => {
+const ClientsListView = () => {
   const classes = useStyles();
-  const [users, setUsers] = useState([]);
-  const [showAddUserDialog, setShowAddUserDialog] = useState(false);
-  const [showUserDialog, setShowUserDialog] = useState(false);
+  const [clients, setClients] = useState([]);
+  const [showClientDialog, setShowClientDialog] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [searchUser, setSearchUser] = useState("");
-  const [selectedUser, setSelectedUser] = useState({});
+  const [searchClient, setSearchClient] = useState("");
+  const [selectedClient, setSelectedClient] = useState({});
 
-  const handleChangeSearchUser = (ev) => {
-    setSearchUser(ev.target.value)
+  const handleChangeSearcClient = (ev) => {
+    setSearchClient(ev.target.value)
   }
 
-  const handleCloseAddUser = () => {
-    setShowAddUserDialog(!showAddUserDialog)
+  const handleCloseDialogClient = () => {
+    setShowClientDialog(!showClientDialog)
   }
 
-  const handleCloseDialogUser = () => {
-    setShowUserDialog(!showUserDialog)
-  }
-
-  const getUserOfTheTable = (selecteds) => {
+  const getClientOfTheTable = (selecteds) => {
     if (selecteds.length == 1) {
-      setSelectedUser(filtered[(selecteds[0] - 1)])
-      handleCloseDialogUser()
+      setSelectedClient(filtered[(selecteds[0] - 1)])
+      handleCloseDialogClient()
     } else {
       alert("Só é possível editar 1 usuário por vez.")
     }
   }
 
-  const getUsers = () => {
+  const getClients = () => {
     setLoading(true)
-    apiAuth.get('/user').then((response) => {
+    apiAuth.get('/client').then((response) => {
       if (response.status === 200) {
         let res = response.data;
 
         if (res.success) {
-          setUsers(res.data)
+          setClients(res.data)
         }
       }
     }).catch(error => {
@@ -73,20 +67,20 @@ const UsersListView = () => {
 
   useEffect(() => {
 
-    getUsers()
+    getClients()
   }, []);
 
-  const filtered = users.filter((user) => {
-    return `${user.nome} ${user.sobrenome}`.toLowerCase().indexOf(searchUser) >= 0
+  const filtered = clients.filter((user) => {
+    return `${user.nome} ${user.sobrenome}`.toLowerCase().indexOf(searchClient) >= 0
   })
 
   return (
     <Page
       className={classes.root}
-      title="Usuários"
+      title="Clientes"
     >
       <Container maxWidth={false}>
-        <Toolbar searchUser={searchUser} resetPage={getUsers} handleChange={handleChangeSearchUser} handleCloseAddUser={handleCloseAddUser} />
+        <Toolbar searchClient={searchClient} resetPage={getClients} handleChange={handleChangeSearcClient} />
         <Box mt={3}>
           {
             loading ?
@@ -103,16 +97,15 @@ const UsersListView = () => {
                   />
                 </div>
               </Grid> :
-              <Results users={filtered} showUser={getUserOfTheTable} />
+              <Results clients={filtered} showClient={getClientOfTheTable} />
           }
         </Box>
       </Container>
       {/* Dialogs */}
-      <AddUserDialog showAddUserDialog={showAddUserDialog} handleCloseAddUser={handleCloseAddUser} resetPage={getUsers} />
-      <ShowUserDialog open={showUserDialog} handleClose={handleCloseDialogUser} user={selectedUser} resetPage={getUsers} />
+      <ShowClientDialog open={showClientDialog} handleClose={handleCloseDialogClient} client={selectedClient} />
 
     </Page>
   );
 };
 
-export default UsersListView;
+export default ClientsListView;

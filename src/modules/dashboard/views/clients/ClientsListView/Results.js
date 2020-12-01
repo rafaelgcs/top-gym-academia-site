@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Results = ({ showUser, className, users, ...rest }) => {
+const Results = ({ showClient, className, clients, ...rest }) => {
   const classes = useStyles();
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
@@ -37,7 +37,7 @@ const Results = ({ showUser, className, users, ...rest }) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = users.map((user) => user.id);
+      newSelectedCustomerIds = clients.map((user) => user.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -85,9 +85,9 @@ const Results = ({ showUser, className, users, ...rest }) => {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => showUser(selectedCustomerIds)}
+            onClick={() => showClient(selectedCustomerIds)}
           >
-            Editar Usuário
+            Visualizar Cliente
         </Button>
         </Box>
       }
@@ -102,11 +102,11 @@ const Results = ({ showUser, className, users, ...rest }) => {
                 <TableRow>
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.length === users.length}
+                      checked={selectedCustomerIds.length === clients.length}
                       color="primary"
                       indeterminate={
                         selectedCustomerIds.length > 0
-                        && selectedCustomerIds.length < users.length
+                        && selectedCustomerIds.length < clients.length
                       }
                       onChange={handleSelectAll}
                     />
@@ -123,7 +123,7 @@ const Results = ({ showUser, className, users, ...rest }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.slice(0, limit).map((user) => (
+                {clients.slice(0, limit).map((user) => (
                   <TableRow
                     hover
                     key={user.id}
@@ -170,7 +170,7 @@ const Results = ({ showUser, className, users, ...rest }) => {
         </PerfectScrollbar>
         <TablePagination
           component="div"
-          count={users.length}
+          count={clients.length}
           onChangePage={handlePageChange}
           onChangeRowsPerPage={handleLimitChange}
           page={page}
@@ -184,7 +184,7 @@ const Results = ({ showUser, className, users, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  users: PropTypes.array.isRequired
+  clients: PropTypes.array.isRequired
 };
 
 export default Results;

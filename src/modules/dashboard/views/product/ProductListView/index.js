@@ -14,7 +14,7 @@ import ProductCard from './ProductCard';
 import data from './data';
 import Draggable from 'react-draggable';
 import AddProductDialog from '../dialogs/AddProduct';
-import { apiAuth } from 'services/api';
+import { apiAuth, refreshToken } from 'services/api';
 import ShowProductDialog from '../dialogs/ShowProduct';
 
 const useStyles = makeStyles((theme) => ({
@@ -92,33 +92,39 @@ const ProductList = () => {
     }
   }
 
-  useEffect(() => {
-    const getProducts = () => {
-      apiAuth.get('/product').then((response) => {
-        if (response.status === 200) {
-          let res = response.data;
+  const getProducts = () => {
+    setLoading(true)
+    apiAuth.get('/product').then((response) => {
+      if (response.status === 200) {
+        let res = response.data;
 
-          if (res.success) {
-            setProducts(res.data)
-            if (res.data.length <= maxPerPage) {
-              setPages(1)
+        if (res.success) {
+          setProducts(res.data)
+          if (res.data.length <= maxPerPage) {
+            setPages(1)
+          } else {
+            if (res.data.length % maxPerPage == 0) {
+              setPages(res.data.length / maxPerPage);
+              setOffSet(0);
+              setPage(1);
             } else {
-              if (res.data.length % maxPerPage == 0) {
-                setPages(res.data.length / maxPerPage);
-                setOffSet(0);
-                setPage(1);
-              } else {
-                setPages(parseInt(res.data.length / maxPerPage) + 1);
-                setOffSet(0);
-                setPage(1);
-              }
+              setPages(parseInt(res.data.length / maxPerPage) + 1);
+              setOffSet(0);
+              setPage(1);
             }
           }
         }
-      }).finally(() => {
-        setLoading(false)
-      })
-    }
+      }
+    }).catch(error => {
+      if (error.response.status === 401) {
+        refreshToken()
+      }
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
+
+  useEffect(() => {
 
     getProducts()
   }, []);
@@ -223,8 +229,8 @@ const ProductList = () => {
         }
       </Container>
       {/* Dialogs */}
-      <AddProductDialog openDialogAddProduto={openDialogAddProduto} PaperComponent={PaperComponent} handleCloseAddProduto={handleCloseAddProduto} />
-      <ShowProductDialog openDialogShowProduto={openDialogShowProduto} product={selectedProduct} PaperComponent={PaperComponent} handleChangeShowProduto={handleChangeShowProduto} />
+      <AddProductDialog resetTable={getProducts} openDialogAddProduto={openDialogAddProduto} PaperComponent={PaperComponent} handleCloseAddProduto={handleCloseAddProduto} />
+      <ShowProductDialog resetTable={getProducts} openDialogShowProduto={openDialogShowProduto} product={selectedProduct} PaperComponent={PaperComponent} handleChangeShowProduto={handleChangeShowProduto} />
     </Page>
   );
 };

@@ -10,7 +10,7 @@ import {
     Grid,
     InputAdornment
 } from '@material-ui/core'
-import { apiAuth } from 'services/api'
+import { apiAuth, refreshToken } from 'services/api'
 import { Dropzone } from 'modules/shared/components/Dropzone'
 
 const AddUserDialog = (props) => {
@@ -68,6 +68,9 @@ const AddUserDialog = (props) => {
                     }
                 }).catch(error => {
                     console.log("erro", error)
+                    if (error.response.status === 401) {
+                        refreshToken()
+                    }
                 }).finally(() => {
                     handleCloseAddUser()
                 })

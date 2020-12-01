@@ -13,7 +13,7 @@ import {
     OutlinedInput,
     InputLabel
 } from '@material-ui/core'
-import { apiAuth } from 'services/api'
+import { apiAuth, refreshToken } from 'services/api'
 
 const AddCategoryDialog = (props) => {
     const { openDialogAddCategory, handleCloseAddCategory, PaperComponent } = props
@@ -39,9 +39,12 @@ const AddCategoryDialog = (props) => {
                     console.log("error")
                 }
             }).catch((error) => {
+                if (error.response.status === 401) {
+                    refreshToken()
+                }
                 console.log("error", error)
             })
-        }else{
+        } else {
             alert("Favor preencher todos os campos")
         }
     }

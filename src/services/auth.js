@@ -65,4 +65,18 @@ const isAuthenticated = () => {
     return false
 }
 
-export { getToken, getUser, login, logout, isAuthenticated, getRemember };
+const refresh = (token, expires_in) => {
+    let result = false;
+    try {
+        localStorage.setItem(TOKEN_KEY, token);
+        localStorage.setItem(EXPIRES_IN_KEY, expires_in.toString());
+        localStorage.setItem(LAST_LOGIN_KEY, (new Date()).toString());
+        result = true;
+    } catch (e) {
+        result = false;
+    }
+
+    return result;
+}
+
+export { getToken, getUser, login, logout, isAuthenticated, getRemember, refresh };
