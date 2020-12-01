@@ -12,10 +12,8 @@ import {
   makeStyles
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import getInitials from '../../../utils/getInitials';
 import moment from 'moment';
-
-const defaultProductImage = require('../../../../shared/assets/img/default-product.png');
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,9 +24,17 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     display: 'flex'
   },
+  statsIcon: {
+    marginRight: theme.spacing(1)
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    fontSize: 40
+  }
 }));
 
-const ProductCard = ({ className, product, ...rest }) => {
+const CategoryCard = ({ className, category, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -42,12 +48,12 @@ const ProductCard = ({ className, product, ...rest }) => {
           justifyContent="center"
           mb={3}
         >
-          {/* <Avatar
-            alt="Product"
-            src={product.media}
-            variant="square"
-          /> */}
-          <img width={'100%'} src={product.images.length > 0 ? product.images[0].image_url : defaultProductImage} />
+          <Avatar
+            className={classes.avatar}
+            src="/static/images/avatars/avatar_6.png"
+          >
+            {getInitials(category.nome)}
+          </Avatar>
         </Box>
         <Typography
           align="center"
@@ -55,14 +61,14 @@ const ProductCard = ({ className, product, ...rest }) => {
           gutterBottom
           variant="h4"
         >
-          {product.nome}
+          {category.nome}
         </Typography>
         <Typography
           align="center"
           color="textPrimary"
           variant="body1"
         >
-          {product.description}
+          {category.descricao}
         </Typography>
       </CardContent>
       <Box flexGrow={1} />
@@ -86,23 +92,7 @@ const ProductCard = ({ className, product, ...rest }) => {
               display="inline"
               variant="body2"
             >
-              Atualizado em... {moment(product.updated_at).format('DD/MM/YYYY HH:mm')}
-            </Typography>
-          </Grid>
-          <Grid
-            className={classes.statsItem}
-            item
-          >
-            <GetAppIcon
-              className={classes.statsIcon}
-              color="action"
-            />
-            <Typography
-              color="textSecondary"
-              display="inline"
-              variant="body2"
-            >
-              {`R$${parseFloat(product.valor).toFixed(2)}`}
+              Atualizado em... {moment(category.updated_at).format('DD/MM/YYYY HH:mm')}
             </Typography>
           </Grid>
         </Grid>
@@ -111,9 +101,9 @@ const ProductCard = ({ className, product, ...rest }) => {
   );
 };
 
-ProductCard.propTypes = {
+CategoryCard.propTypes = {
   className: PropTypes.string,
-  product: PropTypes.object.isRequired
+  category: PropTypes.object.isRequired
 };
 
-export default ProductCard;
+export default CategoryCard;

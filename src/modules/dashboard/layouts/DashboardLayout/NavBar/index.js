@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -23,6 +23,7 @@ import {
   Users as UsersIcon
 } from 'react-feather';
 import NavItem from './NavItem';
+import { getUser } from 'services/auth';
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
@@ -32,44 +33,39 @@ const user = {
 
 const items = [
   {
-    href: '/admin/dashboard',
+    href: '/admin',
     icon: BarChartIcon,
-    title: 'Dashboard'
-  },
-  {
-    href: '/admin/customers',
-    icon: UsersIcon,
-    title: 'Customers'
+    title: 'Página Inicial'
   },
   {
     href: '/admin/products',
     icon: ShoppingBagIcon,
-    title: 'Products'
+    title: 'Produtos'
+  },
+  {
+    href: '/admin/categories',
+    icon: ShoppingBagIcon,
+    title: 'Categorias'
+  },
+  {
+    href: '/admin/users',
+    icon: UsersIcon,
+    title: 'Usuários'
+  },
+  {
+    href: '/admin/customers',
+    icon: UsersIcon,
+    title: 'Clientes'
   },
   {
     href: '/admin/account',
     icon: UserIcon,
-    title: 'Account'
+    title: 'Perfil'
   },
   {
     href: '/admin/settings',
     icon: SettingsIcon,
-    title: 'Settings'
-  },
-  {
-    href: '/loja/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/loja/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
+    title: 'Configurações'
   }
 ];
 
@@ -92,13 +88,19 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
+  const [user, setUser] = useState({});
+
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  useEffect(() => {
+    let nUser = getUser()
+    setUser(nUser);
+  }, [])
 
   const content = (
     <Box
@@ -115,7 +117,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={user.avatar}
+          src='/static/images/avatars/avatar_6.png'
           to="/admin/account"
         />
         <Typography
@@ -123,13 +125,13 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {user.nome}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {user.type}
         </Typography>
       </Box>
       <Divider />
@@ -146,39 +148,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </List>
       </Box>
       <Box flexGrow={1} />
-      <Box
-        p={2}
-        m={2}
-        bgcolor="background.dark"
-      >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
-          Need more?
-        </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
-        <Box
-          display="flex"
-          justifyContent="center"
-          mt={2}
-        >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
-        </Box>
-      </Box>
     </Box>
   );
 
@@ -215,7 +184,7 @@ NavBar.propTypes = {
 };
 
 NavBar.defaultProps = {
-  onMobileClose: () => {},
+  onMobileClose: () => { },
   openMobile: false
 };
 

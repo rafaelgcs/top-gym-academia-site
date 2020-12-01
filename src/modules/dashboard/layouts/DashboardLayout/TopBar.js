@@ -15,6 +15,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from '../../components/Logo';
+import { logout } from 'services/auth';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -31,6 +32,12 @@ const TopBar = ({
 }) => {
   const classes = useStyles();
   const [notifications] = useState([]);
+
+  const doLogout = () => {
+    if (logout()) {
+      window.location.href = "/admin/login"
+    }
+  }
 
   return (
     <AppBar
@@ -53,7 +60,7 @@ const TopBar = ({
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton onClick={doLogout} color="inherit">
             <InputIcon />
           </IconButton>
         </Hidden>

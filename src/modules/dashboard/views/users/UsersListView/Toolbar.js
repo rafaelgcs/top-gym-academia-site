@@ -24,10 +24,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ searchProduct, handleChange, handleCloseAddProduto, className, ...rest }) => {
+const Toolbar = ({ searchUser, handleChange, handleCloseAddUser, resetPage, className, ...rest }) => {
   const classes = useStyles();
 
-  const [search, setSearch] = useState(searchProduct)
+  const [search, setSearch] = useState(searchUser)
   const doneTyping = () => {
     handleChange({ target: { value: search } })
   }
@@ -50,12 +50,15 @@ const Toolbar = ({ searchProduct, handleChange, handleCloseAddProduto, className
         display="flex"
         justifyContent="flex-end"
       >
+        <Button onClick={resetPage} className={classes.exportButton}>
+          Recarregar Página
+        </Button>
         <Button
           color="primary"
           variant="contained"
-          onClick={handleCloseAddProduto}
+          onClick={handleCloseAddUser}
         >
-          Novo Produto
+          Novo Usuário
         </Button>
       </Box>
       <Box mt={3}>
@@ -80,12 +83,10 @@ const Toolbar = ({ searchProduct, handleChange, handleCloseAddProduto, className
                       </InputAdornment>
                     )
                   }}
-                  placeholder="Buscar produto"
+                  placeholder="Buscar usuário"
                   variant="outlined"
                   value={search}
                   onChange={onChange}
-                // onKeyUp={onKeyUp}
-                // onKeyDown={onKeyDown}
                 />
               </Grid>
               <Grid item md={4} alignContent="end" className={"mt-2"}>

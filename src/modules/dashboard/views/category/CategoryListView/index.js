@@ -10,12 +10,12 @@ import {
 import { Pagination } from '@material-ui/lab';
 import Page from '../../../components/Page';
 import Toolbar from './Toolbar';
-import ProductCard from './ProductCard';
+import CategoryCard from './CategoryCard';
 import data from './data';
 import Draggable from 'react-draggable';
-import AddProductDialog from '../dialogs/AddProduct';
+import AddProductDialog from '../dialogs/AddCategory';
 import { apiAuth } from 'services/api';
-import ShowProductDialog from '../dialogs/ShowProduct';
+import AddCategoryDialog from '../dialogs/AddCategory';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,69 +37,29 @@ function PaperComponent(props) {
   );
 }
 
-const ProductList = () => {
+const CategoryList = () => {
   const classes = useStyles();
-  const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState({});
-  const [searchProduct, setSearchProduct] = useState("");
-  const [openDialogAddProduto, setOpenDialogAddProduto] = useState(false)
-  const [openDialogShowProduto, setOpenDialogShowProduto] = useState(false)
+  const [category, setCategory] = useState([]);
+  const [openDialogAddCategory, setOpenDialogAddCategory] = useState(false)
+  const [searchCategory, setSearchCategory] = useState("")
   const [loading, setLoading] = useState(true)
   const [pages, setPages] = useState(0);
   const [page, setPage] = useState(1)
   const [maxPerPage, setMaxPerPage] = useState(12)
   const [offSet, setOffSet] = useState(0)
 
-  const handleCloseAddProduto = () => {
-    setOpenDialogAddProduto(!openDialogAddProduto)
-  }
-  const handleChangeShowProduto = () => {
-    setOpenDialogShowProduto(!openDialogShowProduto)
-  }
-
-  const scrollToTop = () => window.scrollTo(0, 0)
-
-  const changePage = (ev, item) => {
-    if (item == 1) {
-      setPage(item)
-      setOffSet(0);
-    } else {
-      setPage(item)
-      setOffSet((item - 1) * maxPerPage);
-    }
-    scrollToTop()
-  }
-
-  const handleChangeSearchProduct = (ev) => {
-    setSearchProduct(ev.target.value)
-  }
-
-  const reorderPages = () => {
-    if (filtered.length <= maxPerPage) {
-      setPages(1)
-      setPage(1)
-      setOffSet(0)
-    } else {
-      if (filtered.length % maxPerPage == 0) {
-        setPages(filtered.length / maxPerPage);
-        setOffSet(0);
-        setPage(1);
-      } else {
-        setPages(parseInt(filtered.length / maxPerPage) + 1);
-        setOffSet(0);
-        setPage(1);
-      }
-    }
+  const handleCloseAddCategory = () => {
+    setOpenDialogAddCategory(!openDialogAddCategory)
   }
 
   useEffect(() => {
-    const getProducts = () => {
-      apiAuth.get('/product').then((response) => {
+    const getCategories = () => {
+      apiAuth.get('/category').then((response) => {
         if (response.status === 200) {
           let res = response.data;
 
           if (res.success) {
-            setProducts(res.data)
+            setCategory(res.data)
             if (res.data.length <= maxPerPage) {
               setPages(1)
             } else {
@@ -120,11 +80,46 @@ const ProductList = () => {
       })
     }
 
-    getProducts()
+    getCategories()
   }, []);
 
-  const filtered = products.filter((item) => {
-    return item.nome.toLowerCase().indexOf(searchProduct.toLowerCase()) >= 0 || item.id.toString().indexOf(searchProduct) >= 0
+  const scrollToTop = () => window.scrollTo(0, 0)
+
+  const changePage = (ev, item) => {
+    if (item == 1) {
+      setPage(item)
+      setOffSet(0);
+    } else {
+      setPage(item)
+      setOffSet((item - 1) * maxPerPage);
+    }
+    scrollToTop()
+  }
+
+  const handleChangeSearchCategory = (ev) => {
+    setSearchCategory(ev.target.value)
+  }
+
+  const reorderPages = () => {
+    if (filtered.length <= maxPerPage) {
+      setPages(1)
+      setPage(1)
+      setOffSet(0)
+    } else {
+      if (filtered.length % maxPerPage == 0) {
+        setPages(filtered.length / maxPerPage);
+        setOffSet(0);
+        setPage(1);
+      } else {
+        setPages(parseInt(filtered.length / maxPerPage) + 1);
+        setOffSet(0);
+        setPage(1);
+      }
+    }
+  }
+
+  const filtered = category.filter((item) => {
+    return item.nome.toLowerCase().indexOf(searchCategory.toLowerCase()) >= 0 || item.id.toString().indexOf(searchCategory) >= 0
   })
 
   useEffect(() => {
@@ -135,15 +130,15 @@ const ProductList = () => {
 
   useEffect(() => {
     reorderPages()
-  }, [searchProduct])
+  }, [searchCategory])
 
   return (
     <Page
       className={classes.root}
-      title="Produtos"
+      title="Categorias"
     >
       <Container maxWidth={false}>
-        <Toolbar searchProduct={searchProduct} handleChange={handleChangeSearchProduct} handleCloseAddProduto={handleCloseAddProduto} />
+        <Toolbar searchCategory={searchCategory} handleChange={handleChangeSearchCategory} handleCloseAddCategory={handleCloseAddCategory} />
         {
           filtered.length > 0 && <Box
             mt={3}
@@ -179,31 +174,24 @@ const ProductList = () => {
                     />
                   </div>
                 </Grid> :
-                filtered.map((product, index) => {
+                filtered.map((cat, index) => {
                   if (index >= offSet && index < maxPerPage * page) {
                     return (
                       <Grid
                         item
-                        key={product.id}
+                        key={cat.id}
                         lg={4}
                         md={6}
-                        xs={6}
+                        xs={12}
                       >
-                        <div
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => { setSelectedProduct(product); handleChangeShowProduto() }}
-                        >
-
-                          <ProductCard
-                            className={classes.productCard}
-                            product={product}
-                          />
-                        </div>
+                        <CategoryCard
+                          className={classes.productCard}
+                          category={cat}
+                        />
                       </Grid>
                     )
                   }
-                })
-            }
+                })}
           </Grid>
         </Box>
         {
@@ -223,10 +211,9 @@ const ProductList = () => {
         }
       </Container>
       {/* Dialogs */}
-      <AddProductDialog openDialogAddProduto={openDialogAddProduto} PaperComponent={PaperComponent} handleCloseAddProduto={handleCloseAddProduto} />
-      <ShowProductDialog openDialogShowProduto={openDialogShowProduto} product={selectedProduct} PaperComponent={PaperComponent} handleChangeShowProduto={handleChangeShowProduto} />
+      <AddCategoryDialog openDialogAddCategory={openDialogAddCategory} PaperComponent={PaperComponent} handleCloseAddCategory={handleCloseAddCategory} />
     </Page>
   );
 };
 
-export default ProductList;
+export default CategoryList;

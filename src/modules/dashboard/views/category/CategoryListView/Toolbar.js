@@ -24,10 +24,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ searchProduct, handleChange, handleCloseAddProduto, className, ...rest }) => {
+const Toolbar = ({ searchCategory, handleChange, handleCloseAddCategory, className, ...rest }) => {
   const classes = useStyles();
+  const [search, setSearch] = useState(searchCategory)
 
-  const [search, setSearch] = useState(searchProduct)
   const doneTyping = () => {
     handleChange({ target: { value: search } })
   }
@@ -53,9 +53,9 @@ const Toolbar = ({ searchProduct, handleChange, handleCloseAddProduto, className
         <Button
           color="primary"
           variant="contained"
-          onClick={handleCloseAddProduto}
+          onClick={handleCloseAddCategory}
         >
-          Novo Produto
+          Nova Categoria
         </Button>
       </Box>
       <Box mt={3}>
@@ -80,12 +80,10 @@ const Toolbar = ({ searchProduct, handleChange, handleCloseAddProduto, className
                       </InputAdornment>
                     )
                   }}
-                  placeholder="Buscar produto"
+                  placeholder="Buscar categoria"
                   variant="outlined"
                   value={search}
                   onChange={onChange}
-                // onKeyUp={onKeyUp}
-                // onKeyDown={onKeyDown}
                 />
               </Grid>
               <Grid item md={4} alignContent="end" className={"mt-2"}>

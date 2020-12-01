@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -32,15 +32,13 @@ const useStyles = makeStyles(() => ({
   root: {}
 }));
 
-const ProfileDetails = ({ className, ...rest }) => {
+const ProfileDetails = ({ user, className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+    nome: user.nome,
+    sobrenome: user.sobrenome,
+    email: user.email,
+    type: user.type,
   });
 
   const handleChange = (event) => {
@@ -49,6 +47,10 @@ const ProfileDetails = ({ className, ...rest }) => {
       [event.target.name]: event.target.value
     });
   };
+
+  useEffect(() => {
+    setValues(user)
+  }, [user])
 
   return (
     <form
@@ -59,8 +61,8 @@ const ProfileDetails = ({ className, ...rest }) => {
     >
       <Card>
         <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
+          subheader="As informações abaixo podem ser editadas"
+          title="Perfil do Usuário"
         />
         <Divider />
         <CardContent>
@@ -75,12 +77,12 @@ const ProfileDetails = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                helperText="Please specify the first name"
-                label="First name"
-                name="firstName"
+                helperText={values.nome == "" && "Por favor, insira apenas o seu nome"}
+                label="Nome"
+                name="nome"
                 onChange={handleChange}
                 required
-                value={values.firstName}
+                value={values.nome}
                 variant="outlined"
               />
             </Grid>
@@ -91,11 +93,12 @@ const ProfileDetails = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                label="Last name"
-                name="lastName"
+                label="Sobrenome"
+                helperText={values.sobrenome == "" && "Por favor, insira apenas o seu sobrenome"}
+                name="sobrenome"
                 onChange={handleChange}
                 required
-                value={values.lastName}
+                value={values.sobrenome}
                 variant="outlined"
               />
             </Grid>
@@ -106,69 +109,13 @@ const ProfileDetails = ({ className, ...rest }) => {
             >
               <TextField
                 fullWidth
-                label="Email Address"
+                label="E-mail"
                 name="email"
                 onChange={handleChange}
                 required
                 value={values.email}
                 variant="outlined"
               />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone"
-                onChange={handleChange}
-                type="number"
-                value={values.phone}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
             </Grid>
           </Grid>
         </CardContent>
@@ -182,7 +129,7 @@ const ProfileDetails = ({ className, ...rest }) => {
             color="primary"
             variant="contained"
           >
-            Save details
+            Salvar Mudanças
           </Button>
         </Box>
       </Card>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Grid,
@@ -7,6 +7,8 @@ import {
 import Page from '../../../components/Page';
 import Profile from './Profile';
 import ProfileDetails from './ProfileDetails';
+import PasswordRecover from './PasswordRecover';
+import { getUser } from 'services/auth';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +21,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Account = () => {
   const classes = useStyles();
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    let nUser = getUser()
+
+    setUser(nUser)
+  }, [])
 
   return (
     <Page
@@ -36,7 +45,7 @@ const Account = () => {
             md={6}
             xs={12}
           >
-            <Profile />
+            <Profile user={user} />
           </Grid>
           <Grid
             item
@@ -44,7 +53,22 @@ const Account = () => {
             md={6}
             xs={12}
           >
-            <ProfileDetails />
+            <ProfileDetails user={user} />
+          </Grid>
+          <Grid
+            item
+            lg={4}
+            md={6}
+            xs={12}
+          >
+          </Grid>
+          <Grid
+            item
+            lg={8}
+            md={6}
+            xs={12}
+          >
+            <PasswordRecover user={user} />
           </Grid>
         </Grid>
       </Container>

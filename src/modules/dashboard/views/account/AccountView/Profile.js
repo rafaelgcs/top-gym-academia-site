@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -13,15 +13,8 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
-};
+import { getUser } from 'services/auth';
+moment.locale('pt-br')
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -31,7 +24,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Profile = ({ className, ...rest }) => {
+const Profile = ({ user, className, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -54,33 +47,33 @@ const Profile = ({ className, ...rest }) => {
             gutterBottom
             variant="h3"
           >
-            {user.name}
+            {user.nome}
           </Typography>
           <Typography
             color="textSecondary"
             variant="body1"
           >
-            {`${user.city} ${user.country}`}
+            {user.sobrenome}
           </Typography>
           <Typography
             className={classes.dateText}
             color="textSecondary"
             variant="body1"
           >
-            {`${moment().format('hh:mm A')} ${user.timezone}`}
+            {`Criado em: ${moment(user.created_at).format('DD/MM/YYYY HH:mm')}`}
           </Typography>
         </Box>
       </CardContent>
       <Divider />
-      <CardActions>
+      {/* <CardActions>
         <Button
           color="primary"
           fullWidth
           variant="text"
         >
-          Upload picture
+          Atualizar Foto de Perfil
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };
