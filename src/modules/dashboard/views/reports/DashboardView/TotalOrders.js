@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const TasksProgress = ({ className, ...rest }) => {
+const TotalOrders = ({ className, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -45,13 +45,13 @@ const TasksProgress = ({ className, ...rest }) => {
               gutterBottom
               variant="h6"
             >
-              TASKS PROGRESS
+              TOTAL PEDIDOS
             </Typography>
             <Typography
               color="textPrimary"
               variant="h3"
             >
-              75.5%
+              --
             </Typography>
           </Grid>
           <Grid item>
@@ -60,19 +60,13 @@ const TasksProgress = ({ className, ...rest }) => {
             </Avatar>
           </Grid>
         </Grid>
-        <Box mt={3}>
-          <LinearProgress
-            value={75.5}
-            variant="determinate"
-          />
-        </Box>
       </CardContent>
     </Card>
   );
 };
 
-TasksProgress.propTypes = {
+TotalOrders.propTypes = {
   className: PropTypes.string
 };
 
-export default TasksProgress;
+export default TotalOrders;

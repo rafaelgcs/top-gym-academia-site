@@ -24,6 +24,8 @@ import { isAuthenticated } from 'services/auth';
 import UsersListView from 'modules/dashboard/views/users/UsersListView';
 import CategoryListView from 'modules/dashboard/views/category/CategoryListView';
 import ClientsListView from 'modules/dashboard/views/clients/ClientsListView';
+import StoreHomePage from 'modules/store/views/home';
+import StoreMainLayout from 'modules/store/layouts/MainLayout';
 
 const routes = [
     { path: 'admin/login', element: isAuthenticated() ? <Navigate to="/admin" /> : <LoginDashboardView /> },
@@ -44,8 +46,9 @@ const routes = [
     },
     {
         path: '/loja',
-        element: <MainLayout />,
+        element: <StoreMainLayout />,
         children: [
+            { path: '/', element: <StoreHomePage /> },
             { path: 'login', element: isAuthenticated() ? <Navigate to="/loja" /> : <LoginView /> },
             { path: 'register', element: isAuthenticated() ? <Navigate to="/loja" /> : <RegisterView /> },
             { path: '404', element: <NotFoundView /> },

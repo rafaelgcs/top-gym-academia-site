@@ -143,7 +143,7 @@ const HomeNavbarLinks = (props) => {
                     }}
                     buttonIcon={Apps}
                     dropdownList={[
-                        <Link to="/" className={classes.dropdownLink}>
+                        <Link to="/loja" className={classes.dropdownLink}>
                             Nossa Loja
                         </Link>,
                         <a

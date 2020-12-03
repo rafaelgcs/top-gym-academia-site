@@ -44,7 +44,7 @@ const TotalCustomers = ({ className, ...rest }) => {
         <Grid
           container
           justify="space-between"
-          spacing={3}
+          spacing={2}
         >
           <Grid item>
             <Typography
