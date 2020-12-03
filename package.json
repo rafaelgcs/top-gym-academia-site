@@ -2,6 +2,7 @@
   "name": "top-gym-academia",
   "author": "Rafael Guimarães",
   "version": "1.0.0",
+  "homepage": "https://demo.topgymacademia.com.br",
   "private": true,
   "scripts": {
     "start": "react-scripts start",

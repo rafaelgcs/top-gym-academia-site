@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const BottomBar = (props) => {
-    const { handleCloseSearchDialog } = props
+    const { handleCloseSearchDialog, handleClickShowCart, handleClickMore } = props
     const classes = useStyles()
     const [invisibleCartBadge, setInvisibleCartBadge] = useState(false)
     const [cart, setCart] = useState([1])
@@ -54,7 +54,7 @@ const BottomBar = (props) => {
                     </IconButton>
                     {
                         cart.length > 0 &&
-                        <Fab color="secondary" aria-label="add" className={classes.fabButton}>
+                        <Fab color="secondary" aria-label="add" className={classes.fabButton} onClick={handleClickShowCart}>
                             <Badge
                                 invisible={invisibleCartBadge}
                                 badgeContent={1}
@@ -68,7 +68,7 @@ const BottomBar = (props) => {
                     <IconButton color="inherit" onClick={handleCloseSearchDialog}>
                         <SearchIcon />
                     </IconButton>
-                    <IconButton edge="end" color="inherit">
+                    <IconButton edge="end" color="inherit" onClick={() => { handleClickMore(1) }}>
                         <MoreIcon />
                     </IconButton>
                 </Toolbar>

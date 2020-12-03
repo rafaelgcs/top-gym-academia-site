@@ -48,7 +48,7 @@ const routes = [
         path: '/loja',
         element: <StoreMainLayout />,
         children: [
-            { path: '/', element: <StoreHomePage /> },
+            { path: '', element: <StoreHomePage /> },
             { path: 'login', element: isAuthenticated() ? <Navigate to="/loja" /> : <LoginView /> },
             { path: 'register', element: isAuthenticated() ? <Navigate to="/loja" /> : <RegisterView /> },
             { path: '404', element: <NotFoundView /> },
