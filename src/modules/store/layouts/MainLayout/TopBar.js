@@ -20,7 +20,9 @@ import { logout } from 'services/auth'
 import Logo from 'modules/shared/components/Logo'
 
 const useStyles = makeStyles(() => ({
-    root: {},
+    root: {
+        minHeight: 64,
+    },
     avatar: {
         width: 60,
         height: 60
@@ -49,7 +51,7 @@ const TopBar = ({
             {...rest}
         >
             <Toolbar>
-                <RouterLink to="/">
+                <RouterLink to="/loja">
                     <Logo />
                 </RouterLink>
                 <Box flexGrow={1} />

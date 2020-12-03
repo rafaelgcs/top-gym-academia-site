@@ -3,7 +3,7 @@ import { AppBar, Card, CardContent, CircularProgress, Container, Dialog, DialogC
 import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
 import { apiAuth } from 'services/api';
-import ProductCard from '../components/ProductCard';
+import ProductCard from '../ProductCard';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -96,6 +96,7 @@ const SearchDialog = (props) => {
                             <CircularProgress
                                 size={40}
                                 thickness={5}
+                                color="inherit"
                             />
                             <p>
                                 Efetuando Busca

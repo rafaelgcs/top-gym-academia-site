@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, ThemeProvider } from '@material-ui/core'
 import BottomBar from './BottomBar'
 import { useMediaQuery } from 'react-responsive'
 import TopBar from './TopBar'
-import SearchDialog from './Dialogs/SearchDialog'
+import SearchDialog from './components/Dialogs/SearchDialog'
+import theme from 'modules/store/theme'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,22 +50,24 @@ const StoreMainLayout = () => {
     }
 
     return (
-        <div className={classes.root}>
-            <TopBar handleCloseSearchDialog={handleCloseSearchDialog} />
-            <div className={classes.wrapper}>
-                <div className={classes.contentContainer}>
-                    <div className={classes.content}>
-                        <Outlet />
+        <ThemeProvider theme={theme} >
+            <div className={classes.root}>
+                <TopBar handleCloseSearchDialog={handleCloseSearchDialog} />
+                <div className={classes.wrapper}>
+                    <div className={classes.contentContainer}>
+                        <div className={classes.content}>
+                            <Outlet />
+                        </div>
                     </div>
                 </div>
+                {isTabletOrMobile && <BottomBar handleCloseSearchDialog={handleCloseSearchDialog} />}
+                {/* Dialogs */}
+                <SearchDialog
+                    show={openSearchDialog}
+                    handleClose={handleCloseSearchDialog}
+                />
             </div>
-            {isTabletOrMobile && <BottomBar handleCloseSearchDialog={handleCloseSearchDialog} />}
-            {/* Dialogs */}
-            <SearchDialog
-                show={openSearchDialog}
-                handleClose={handleCloseSearchDialog}
-            />
-        </div>
+        </ThemeProvider>
     )
 }
 

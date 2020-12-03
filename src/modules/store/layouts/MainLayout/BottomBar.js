@@ -4,12 +4,10 @@ import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Fab from '@material-ui/core/Fab'
 import MenuIcon from '@material-ui/icons/Menu'
-import AddIcon from '@material-ui/icons/Add'
 import SearchIcon from '@material-ui/icons/Search'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
-import { Badge, Dialog, DialogContent, DialogTitle, makeStyles, Grid, TextField, InputAdornment, CardContent, Card } from '@material-ui/core'
-import SearchDialog from './Dialogs/SearchDialog'
+import { Badge, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     text: {

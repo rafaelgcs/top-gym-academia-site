@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
-import { Card, CardHeader, IconButton, CardMedia, CardContent, CardActions, Collapse, Typography, makeStyles } from '@material-ui/core'
+import { Card, CardHeader, IconButton, CardMedia, CardContent, CardActions, Collapse, Typography, makeStyles, Grid } from '@material-ui/core'
 import { red } from '@material-ui/core/colors'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 import Dinero from 'dinero.js'
@@ -11,11 +11,17 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 const defaultProductImage = require('../../../../shared/assets/img/default-product.png')
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345,
+        borderRadius: 15
     },
     media: {
         height: 0,
         paddingTop: '56.25%', // 16:9
+        opacity: 0.4,
+        '&:hover': {
+            opacity: 1,
+        },
+        cursor: 'pointer',
+        transition: 'all .2s ease'
     },
     expand: {
         transform: 'rotate(0deg)',
@@ -23,9 +29,7 @@ const useStyles = makeStyles((theme) => ({
         transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
         }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
+        color: theme.palette.getContrastText(theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.background.paper)
     },
     avatar: {
         backgroundColor: red[500],
@@ -49,8 +53,8 @@ const ProductCard = (props) => {
     }
 
     return (
-        <Card className={classes.root}>
-            <CardHeader
+        <Card className={classes.root} elevation={5}>
+            {/* <CardHeader
                 action={
                     <IconButton color="primary" aria-label="settings">
                         <AddShoppingCartIcon />
@@ -58,25 +62,45 @@ const ProductCard = (props) => {
                 }
                 title={product.nome}
             // subheader={"September 14, 2016"}
-            />
+            /> */}
             <CardMedia
                 className={classes.media}
                 image={product.images.length > 0 ? product.images[0].image_url : defaultProductImage}
                 title={product.nome}
             />
             <CardActions disableSpacing>
-                <Typography variant="h4" element="h4">
-                    {getPrice(product.valor, product.valor_promocional)}
-                </Typography>
-                <IconButton color="primary"
-                    className={clsx(classes.expand, {
-                        [classes.expandOpen]: expanded,
-                    })}
-                >
-                    <AddShoppingCartIcon />
-                </IconButton>
+                <div style={{ width: '100%' }}>
+                    <Grid container spacing={1}>
+                        <Grid item lg={12} md={12} xs={12} alignContent="center" alignItems="center">
+                            <Typography variant="h6" element="h6">
+                                {product.nome}
+                            </Typography>
+                        </Grid>
+                        <Grid item lg={12} md={12} xs={12} alignContent="center" alignItems="center">
+                            <Typography variant="h3" element="h3" style={{ display: 'inline-block' }}>
+                                {getPrice(product.valor, product.valor_promocional)}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+
+                </div>
+
+                <div style={{ width: '100%' }}>
+                    <Grid container spacing={1}>
+                        <Grid item lg={7} md={7} xs={7} alignContent="center" alignItems="center">
+                        </Grid>
+                        <Grid item lg={4} md={4} xs={4} alignContent="center" alignItems="center">
+                            <IconButton color="primary"
+                                className={classes.expand}
+                                style={{ display: 'inline-block' }}
+                            >
+                                <AddShoppingCartIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                </div>
             </CardActions>
-         </Card>
+        </Card>
     )
 }
 

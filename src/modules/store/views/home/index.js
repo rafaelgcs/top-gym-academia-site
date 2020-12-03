@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,6 +17,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Slider from 'react-slick';
+import { api } from 'services/api';
+import SectionPricing from 'modules/store/components/Sections/SectionPricing'
+import Dinero from 'dinero.js'
+import ProductCard from 'modules/store/layouts/MainLayout/components/ProductCard';
+import { Card, CardContent, Container, Grid } from '@material-ui/core';
+
+const defaultProductImage = require('modules/shared/assets/img/default-product.png')
 
 const messages = [
     {
@@ -95,34 +103,201 @@ const useStyles = makeStyles((theme) => ({
         right: 0,
         margin: '0 auto',
     },
+    slider: {
+        backgroundColor:
+            theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.background.paper,
+        maxWidth: '100%',
+        overflow: 'hidden'
+    }
 }));
 
 const StoreHomePage = () => {
-    const classes = useStyles();
+    const classes = useStyles()
+    const settingsSlider = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        nextArrow: <div style={{ display: 'none' }} />,
+        prevArrow: <div style={{ display: 'none' }} />,
+        initialSlide: 0,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: false
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
+    }
+
+    const settingsSliderProds = {
+        dots: false,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 5,
+        slidesToScroll: 5,
+        nextArrow: <div style={{ display: 'none' }} />,
+        prevArrow: <div style={{ display: 'none' }} />,
+        initialSlide: 0,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: false,
+                    dots: false
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
+    }
+
+    const [featured, setFeatured] = useState([])
+    const [loadedFeatured, setLoadedFeatured] = useState(false)
+    const [grouped, setGrouped] = useState([])
+    const [loadedGrouped, setLoadedGrouped] = useState(false)
+
+    const getPrice = (valor, valor_p) => {
+        let str = (valor_p > 0 ? valor_p : valor).toString()
+        str = str.replaceAll(',', '')
+        str = str.replaceAll('.', '')
+        return (Dinero({ amount: parseInt(str), currency: 'BRL' }).toFormat('$0.00')).replace('.', ',')
+    }
+
+    const renderProduct = (product) => {
+        return (<ProductCard product={product} />)
+    }
+
+    useEffect(() => {
+        const getFeatured = () => {
+            api.get('product/featured').then((response) => {
+
+                if (response.status === 200) {
+                    let res = response.data
+                    setFeatured(res.data)
+                }
+
+            }).finally(() => {
+                setLoadedFeatured(true)
+            })
+        }
+
+        getFeatured()
+    }, [])
+
+    useEffect(() => {
+        const getGrouped = () => {
+            api.get('product/grouped').then((response) => {
+                if (response.status === 200) {
+                    let res = response.data
+                    setGrouped(res.data)
+                }
+            }).finally(() => {
+                setLoadedGrouped(true)
+            })
+        }
+
+        getGrouped()
+    }, [])
 
     return (
         <React.Fragment>
             <CssBaseline />
+            {
+                featured.length > 0 && <Slider {...settingsSlider} className={classes.slider}>
+                    {
+                        featured.map((item) => {
+                            return <SectionPricing item={item} />
+                        })
+                    }
+                </Slider>
+            }
             <Paper square className={classes.paper}>
-                <Typography className={classes.text} variant="h5" gutterBottom>
-                    Inbox
+                <Typography className={classes.text} variant="h2" gutterBottom>
+                    Nossa Loja
                 </Typography>
                 <List className={classes.list}>
-                    {messages.map(({ id, primary, secondary, person }) => (
+                    {grouped.map(({ id, produtos, nome }) => (
                         <React.Fragment key={id}>
-                            {id === 1 && <ListSubheader className={classes.subheader}>Today</ListSubheader>}
-                            {id === 3 && <ListSubheader className={classes.subheader}>Yesterday</ListSubheader>}
-                            <ListItem button>
-                                <ListItemAvatar>
-                                    <Avatar alt="Profile Picture" src={person} />
-                                </ListItemAvatar>
-                                <ListItemText primary={primary} secondary={secondary} />
-                            </ListItem>
+                            <ListSubheader className={classes.subheader}>{nome}</ListSubheader>
+
+                            {
+                                produtos.length > 0 &&
+                                <Container>
+                                    <Slider {...settingsSliderProds} className={classes.slider}>
+                                        {
+                                            produtos.map((prod) => {
+                                                return (
+                                                    <div style={{ padding: 5 }}>
+                                                        <Card style={{ borderRadius: 15 }} elevation={0}>
+                                                            <CardContent>{renderProduct(prod)}</CardContent>
+                                                        </Card>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </Slider>
+                                    {/* <Grid container spacing={1} alignContent="center" alignItems="center">
+                                        {
+                                            produtos.map((prod) => {
+                                                return <Grid item lg={4} md={4} xs={6}> {renderProduct(prod)} </Grid>
+                                            })
+                                                // <ListItem button key={prod.id}>
+                                                //     <ListItemAvatar>
+                                                //         <Avatar alt="Profile Picture" src={prod.images.length > 0 ? prod.images[0].image_url : defaultProductImage} />
+                                                //     </ListItemAvatar>
+                                                //     <ListItemText primary={prod.nome} secondary={getPrice(prod.valor, prod.valor_promocional)} />
+                                                // </ListItem>
+                                            // ))
+                                            // result.map((item) => {
+                                            //     return <Grid item lg={4} md={4} xs={6}> {renderProduct(item)} </Grid>
+                                            // })
+                                        }
+                                    </Grid> */}
+                                </Container>
+
+                            }
+
                         </React.Fragment>
                     ))}
                 </List>
             </Paper>
-        </React.Fragment>
+        </React.Fragment >
     );
 }
 
