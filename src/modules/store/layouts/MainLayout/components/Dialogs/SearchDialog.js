@@ -4,12 +4,15 @@ import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
 import { apiAuth } from 'services/api';
 import ProductCard from '../ProductCard';
+import { useDispatch } from 'react-redux';
+import { addItem } from 'store/reducer/cart'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const SearchDialog = (props) => {
+    const dispatch = useDispatch()
     const { show, handleClose, handleChangeCart } = props
 
     const [afterSearch, setAfterSearch] = useState(false)
@@ -39,8 +42,12 @@ const SearchDialog = (props) => {
 
     }
 
+    const addItemCart = (item) => {
+        dispatch(addItem(item))
+    }
+
     const renderProduct = (product) => {
-        return (<ProductCard product={product} handleChangeCart={handleChangeCart} />)
+        return (<ProductCard product={product} addItemCart={addItemCart} handleChangeCart={handleChangeCart} />)
     }
     return (
         <Dialog fullScreen open={show} onClose={handleClose} TransitionComponent={Transition}>

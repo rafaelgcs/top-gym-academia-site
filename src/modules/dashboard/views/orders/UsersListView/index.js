@@ -48,7 +48,7 @@ const UsersListView = () => {
       setSelectedUser(filtered[(selecteds[0] - 1)])
       handleCloseDialogUser()
     } else {
-      alert("Só é possível editar 1 usuário por vez.")
+      enqueueSnackbar("Só é possível editar 1 usuário por vez.")
     }
   }
 

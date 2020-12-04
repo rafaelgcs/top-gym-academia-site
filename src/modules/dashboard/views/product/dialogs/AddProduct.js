@@ -12,8 +12,10 @@ import {
 } from '@material-ui/core'
 import { apiAuth, refreshToken } from 'services/api'
 import { Dropzone } from 'modules/shared/components/Dropzone'
+import { useSnackbar } from 'notistack'
 
 const AddProductDialog = (props) => {
+    const { enqueueSnackbar } = useSnackbar()
     const { openDialogAddProduto, handleCloseAddProduto, resetTable, PaperComponent } = props
     const [categories, setCategories] = useState([])
     const [files, setFiles] = useState([])
@@ -63,13 +65,13 @@ const AddProductDialog = (props) => {
             apiAuth.post('/product', newProduct).then(response => {
                 updateStock(response.data)
             }).catch(error => {
-                console.log("erro", error)
+                enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
                 if (error.response.status === 401) {
                     refreshToken()
                 }
             })
         } else {
-            alert("Favor preencher todos os campos obrigatórios do formulário!")
+            enqueueSnackbar("Favor preencher todos os campos obrigatórios do formulário!")
         }
     }
 
@@ -81,7 +83,7 @@ const AddProductDialog = (props) => {
         apiAuth.put(`stock/${product.id}`, stock).then(response => {
             sendImages(product)
         }).catch(error => {
-            console.log("erro", error)
+            enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
             if (error.response.status === 401) {
                 refreshToken()
             }
@@ -102,7 +104,7 @@ const AddProductDialog = (props) => {
                         "Content-Type": "multipart/form-data"
                     }
                 }).then((response) => {
-                    alert("Imagens Enviadas Com Sucesso!")
+                    enqueueSnackbar("Imagens Enviadas Com Sucesso!")
                     resetTable()
                     handleCloseAddProduto()
                 }).catch(error => {
@@ -127,7 +129,7 @@ const AddProductDialog = (props) => {
                     }
                 }
             }).catch(error => {
-                console.log("ERRO", error)
+                enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
                 if (error.response.status === 401) {
                     refreshToken()
                 }

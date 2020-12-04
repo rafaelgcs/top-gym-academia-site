@@ -20,6 +20,7 @@ import InputIcon from '@material-ui/icons/Input'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import { logout, isAuthenticated } from 'services/store/auth'
 import Logo from 'modules/shared/components/Logo'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -34,12 +35,20 @@ const useStyles = makeStyles(() => ({
 const TopBar = ({
     handleCloseSearchDialog,
     handleClickShowCart,
-    cart,
-    handleChangeCart,
     className,
     onMobileNavOpen,
     ...rest
 }) => {
+    const cart = useSelector(state => state.cart)
+    const getTotalItens = (itens) => {
+        let total = 0
+
+        itens.map((item) => {
+            total += item.quantidade
+        })
+
+        return total
+    }
     const classes = useStyles()
     const [notifications] = useState([])
 
@@ -69,7 +78,7 @@ const TopBar = ({
                         <IconButton className="ml-2" color="inherit" onClick={handleClickShowCart}>
                             <Badge
                                 invisible={cart.itens != null ? cart.itens.length == 0 : true}
-                                badgeContent={cart.itens != null ? cart.itens.length : 0}
+                                badgeContent={cart.itens != null ? getTotalItens(cart.itens) : 0}
                                 color="white"
                             >
                                 <ShoppingCartIcon />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
@@ -8,6 +8,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import { Badge, makeStyles } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
     text: {
@@ -40,10 +41,20 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const BottomBar = (props) => {
-    const { handleCloseSearchDialog, handleClickShowCart, handleClickMore, cart, handleChangeCart } = props
+    const cart = useSelector(state => state.cart)
+    const { handleCloseSearchDialog, handleClickShowCart, handleClickMore, handleChangeCart } = props
     const classes = useStyles()
     const [invisibleCartBadge, setInvisibleCartBadge] = useState(false)
 
+    const getTotalItens = (itens) => {
+        let total = 0
+
+        itens.map((item) => {
+            total += item.quantidade
+        })
+
+        return total
+    }
 
     return (
         <>
@@ -57,7 +68,7 @@ const BottomBar = (props) => {
                         <Fab color="green" aria-label="add" className={classes.fabButton} onClick={handleClickShowCart}>
                             <Badge
                                 invisible={cart.itens != null ? cart.itens.length == 0 : true}
-                                badgeContent={cart.itens != null ? cart.itens.length : 0}
+                                badgeContent={cart.itens != null ? getTotalItens(cart.itens) : 0}
                                 color="primary"
                             >
                                 <ShoppingCartIcon />

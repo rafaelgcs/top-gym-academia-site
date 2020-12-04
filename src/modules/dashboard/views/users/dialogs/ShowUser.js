@@ -12,8 +12,10 @@ import {
 } from '@material-ui/core'
 import { apiAuth, refreshToken } from 'services/api'
 import Profile from '../../account/AccountView/Profile'
+import { useSnackbar } from 'notistack'
 
 const ShowUserDialog = (props) => {
+    const { enqueueSnackbar } = useSnackbar()
     const { open, user, handleClose, PaperComponent, resetPage } = props
 
     const [newUser, setNewUser] = useState({
@@ -61,11 +63,11 @@ const ShowUserDialog = (props) => {
             if (verifyInputs()) {
                 apiAuth.post('/user', newUser).then(response => {
                     if (response.status === 202 || response.status === 201 || response.status === 200) {
-                        alert('Usuário cadastrado com sucesso!')
+                        enqueueSnackbar('Usuário cadastrado com sucesso!', { variant: 'success' })
                         resetPage()
                     }
                 }).catch(error => {
-                    console.log("erro", error)
+                    enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
                     if (error.response.status === 401) {
                         refreshToken()
                     }
@@ -73,10 +75,10 @@ const ShowUserDialog = (props) => {
                     handleClose()
                 })
             } else {
-                alert("Favor preencher todos os campos obrigatórios do formulário!")
+                enqueueSnackbar("Favor preencher todos os campos obrigatórios do formulário!")
             }
         } else {
-            alert("As senhas inseridas não são iguais...")
+            enqueueSnackbar("As senhas inseridas não são iguais...")
         }
     }
 

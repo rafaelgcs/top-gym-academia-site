@@ -14,8 +14,10 @@ import {
     InputLabel
 } from '@material-ui/core'
 import { apiAuth, refreshToken } from 'services/api'
+import { useSnackbar } from 'notistack'
 
 const AddCategoryDialog = (props) => {
+    const { enqueueSnackbar } = useSnackbar()
     const { openDialogAddCategory, handleCloseAddCategory, PaperComponent } = props
 
     const [newCategory, setNewCategory] = useState({
@@ -35,17 +37,19 @@ const AddCategoryDialog = (props) => {
             apiAuth.post('/category', newCategory).then((response) => {
                 if (response.status === 201 || response.status === 200) {
                     handleCloseAddCategory()
+                    enqueueSnackbar("Categoria criada com sucesso!", { variant: "success" })
                 } else {
-                    console.log("error")
+                    enqueueSnackbar("Não foi possível enviar a categoria.", { variant: "danger" })
                 }
             }).catch((error) => {
                 if (error.response.status === 401) {
                     refreshToken()
                 }
-                console.log("error", error)
+                enqueueSnackbar("Não foi possível enviar a categoria.", { variant: "danger" })
             })
         } else {
-            alert("Favor preencher todos os campos")
+
+            enqueueSnackbar("Favor preencher todos os campos", { variant: "warning" })
         }
     }
     const verifyInputs = () => {

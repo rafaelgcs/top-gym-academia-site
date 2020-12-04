@@ -18,6 +18,7 @@ import { apiAuth, refreshToken } from 'services/api'
 import { Dropzone } from 'modules/shared/components/Dropzone'
 import '../styles/hideArrowsSlider.css'
 import Slider from 'react-slick'
+import { useSnackbar } from 'notistack'
 
 const defaultProductImage = require('../../../../shared/assets/img/default-product.png')
 
@@ -27,8 +28,8 @@ const settings = {
     speed: 500,
     slidesToShow: 5,
     slidesToScroll: 5,
-    nextArrow: <div style={{display: 'none'}} />,
-    prevArrow: <div style={{display: 'none'}} />,
+    nextArrow: <div style={{ display: 'none' }} />,
+    prevArrow: <div style={{ display: 'none' }} />,
     initialSlide: 0,
     responsive: [
         {
@@ -58,6 +59,7 @@ const settings = {
 };
 
 const ShowProductDialog = (props) => {
+    const { enqueueSnackbar } = useSnackbar()
     const { openDialogShowProduto, product, handleChangeShowProduto, resetTable, PaperComponent } = props
     const [categories, setCategories] = useState([])
     const [files, setFiles] = useState([])
@@ -106,7 +108,7 @@ const ShowProductDialog = (props) => {
         apiAuth.put(`/product/${product.id}`, newProduct).then(response => {
             updateStock(response.data)
         }).catch(error => {
-            console.log("erro", error)
+            enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
             if (error.response.status === 401) {
                 refreshToken()
             }
@@ -121,7 +123,7 @@ const ShowProductDialog = (props) => {
         apiAuth.put(`stock/${product.id}`, stock).then(response => {
             sendImages(product)
         }).catch(error => {
-            console.log("erro", error)
+            enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
             if (error.response.status === 401) {
                 refreshToken()
             }
@@ -141,18 +143,18 @@ const ShowProductDialog = (props) => {
                         "Content-Type": "multipart/form-data"
                     }
                 }).then((response) => {
-                    alert("Imagens Enviadas Com Sucesso!")
+                    enqueueSnackbar("Imagens Enviadas Com Sucesso!")
                     resetTable()
                     handleChangeShowProduto()
                 }).catch(error => {
-                    console.log("erro", error)
+                    enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
                     if (error.response.status === 401) {
                         refreshToken()
                     }
                 })
             })
         } else {
-            alert("Produto atualizado com sucesso!")
+            enqueueSnackbar("Produto atualizado com sucesso!")
             resetTable()
             handleChangeShowProduto()
         }
@@ -168,7 +170,7 @@ const ShowProductDialog = (props) => {
                     }
                 }
             }).catch(error => {
-                console.log("ERRO", error)
+                enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
                 if (error.response.status === 401) {
                     refreshToken()
                 }

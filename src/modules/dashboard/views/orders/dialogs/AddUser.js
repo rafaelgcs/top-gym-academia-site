@@ -12,8 +12,10 @@ import {
 } from '@material-ui/core'
 import { apiAuth, refreshToken } from 'modules/dashboard/views/clients/UsersListView/node_modules/services/api'
 import { Dropzone } from 'modules/dashboard/views/clients/dialogs/node_modules/modules/shared/components/Dropzone'
+import { useSnackbar } from 'notistack'
 
 const AddUserDialog = (props) => {
+    const { enqueueSnackbar } = useSnackbar()
     const { showAddUserDialog, handleCloseAddUser, PaperComponent, resetPage } = props
     const [files, setFiles] = useState([])
     const extensionsAccepted = ['png', 'jpg', 'jpeg', 'gif']
@@ -63,11 +65,11 @@ const AddUserDialog = (props) => {
             if (verifyInputs()) {
                 apiAuth.post('/user', newUser).then(response => {
                     if (response.status === 202 || response.status === 201 || response.status === 200) {
-                        alert('Usuário cadastrado com sucesso!')
+                        enqueueSnackbar('Usuário cadastrado com sucesso!', {varoamt: 'success'})
                         resetPage()
                     }
                 }).catch(error => {
-                    console.log("erro", error)
+                    enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
                     if (error.response.status === 401) {
                         refreshToken()
                     }
@@ -75,10 +77,10 @@ const AddUserDialog = (props) => {
                     handleCloseAddUser()
                 })
             } else {
-                alert("Favor preencher todos os campos obrigatórios do formulário!")
+                enqueueSnackbar("Favor preencher todos os campos obrigatórios do formulário!")
             }
         } else {
-            alert("As senhas inseridas não são iguais...")
+            enqueueSnackbar("As senhas inseridas não são iguais...")
         }
     }
 

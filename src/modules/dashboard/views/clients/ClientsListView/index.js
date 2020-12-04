@@ -11,6 +11,7 @@ import Results from './Results';
 import Toolbar from './Toolbar';
 import { apiAuth, refreshToken } from 'services/api';
 import ShowClientDialog from '../dialogs/ShowClient';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ClientsListView = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles();
   const [clients, setClients] = useState([]);
   const [showClientDialog, setShowClientDialog] = useState(false);
@@ -42,7 +44,7 @@ const ClientsListView = () => {
       setSelectedClient(filtered[(selecteds[0] - 1)])
       handleCloseDialogClient()
     } else {
-      alert("Só é possível editar 1 usuário por vez.")
+      enqueueSnackbar("Só é possível editar 1 usuário por vez.")
     }
   }
 
@@ -57,6 +59,7 @@ const ClientsListView = () => {
         }
       }
     }).catch(error => {
+      enqueueSnackbar("Ops! Aconteceu algum problema, tente novamente mais tarde!", { variant: 'danger' })
       if (error.response.status === 401) {
         refreshToken()
       }

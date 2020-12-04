@@ -38,10 +38,20 @@ const useStyles = makeStyles((theme) => ({
 const SectionPricing = (props) => {
     const classes = useStyles();
     const { item } = props
-    const getPrice = (valor, valor_p) => {
+    const getPrice = (valor, valor_p = 0) => {
         let str = (valor_p > 0 ? valor_p : valor).toString()
+        let hasDot = str.indexOf('.')
+        let hasOneAfter = str.split('.')
+
         str = str.replaceAll(',', '')
         str = str.replaceAll('.', '')
+        if (!(hasDot >= 0)) {
+            str = `${str}00`
+        }else if(hasOneAfter.length > 1){
+            if(hasOneAfter[hasOneAfter.length - 1].length == 1){
+                str = `${str}0`
+            }
+        }
         return (Dinero({ amount: parseInt(str), currency: 'BRL' }).toFormat('$0.00')).replace('.', ',')
     }
     return (

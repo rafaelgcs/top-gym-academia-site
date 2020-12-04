@@ -12,6 +12,7 @@ import Toolbar from './Toolbar';
 import { apiAuth, refreshToken } from 'services/api';
 import AddUserDialog from '../dialogs/AddUser';
 import ShowUserDialog from '../dialogs/ShowUser';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UsersListView = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles();
   const [users, setUsers] = useState([]);
   const [showAddUserDialog, setShowAddUserDialog] = useState(false);
@@ -48,7 +50,7 @@ const UsersListView = () => {
       setSelectedUser(filtered[(selecteds[0] - 1)])
       handleCloseDialogUser()
     } else {
-      alert("Só é possível editar 1 usuário por vez.")
+      enqueueSnackbar("Só é possível editar 1 usuário por vez.")
     }
   }
 
@@ -63,6 +65,7 @@ const UsersListView = () => {
         }
       }
     }).catch(error => {
+      enqueueSnackbar("Ops! Aconteceu um probleminha, tente novamente mais tarde!", { variant: 'warning' })
       if (error.response.status === 401) {
         refreshToken()
       }

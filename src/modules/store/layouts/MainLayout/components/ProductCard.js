@@ -9,6 +9,7 @@ import ShareIcon from '@material-ui/icons/Share'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { api } from 'services/api'
 import { getCart, updateCart } from 'services/store/cart'
+import { useSnackbar } from 'notistack'
 
 const defaultProductImage = require('../../../../shared/assets/img/default-product.png')
 const useStyles = makeStyles((theme) => ({
@@ -63,18 +64,29 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ProductCard = (props) => {
+    const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
-    const { product, handleChangeCart } = props
+    const { product, handleChangeCart, addItemCart } = props
     const [expanded, setExpanded] = useState(false)
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     }
 
-    const getPrice = (valor, valor_p) => {
+    const getPrice = (valor, valor_p = 0) => {
         let str = (valor_p > 0 ? valor_p : valor).toString()
+        let hasDot = str.indexOf('.')
+        let hasOneAfter = str.split('.')
+
         str = str.replaceAll(',', '')
         str = str.replaceAll('.', '')
+        if (!(hasDot >= 0)) {
+            str = `${str}00`
+        }else if(hasOneAfter.length > 1){
+            if(hasOneAfter[hasOneAfter.length - 1].length == 1){
+                str = `${str}0`
+            }
+        }
         return (Dinero({ amount: parseInt(str), currency: 'BRL' }).toFormat('$0.00')).replace('.', ',')
     }
 
@@ -98,26 +110,30 @@ const ProductCard = (props) => {
             }
         }
         if (item.estoque.quantidade_disponivel == 0) {
-            alert("O item não está mais em estoque! Tente outro... :(")
+            enqueueSnackbar("O item não está mais em estoque! Tente outro... :(")
         } else {
-            let resultCart = cart.itens.filter((cart_item) => {
-                return cart_item.produto_id == item.id
-            })
+            addItemCart(item)
+            enqueueSnackbar("Produto inserido no carrinho ;)")
+            
 
-            if (resultCart.length > 0) {
-                alert("Vamos incrementar o item ao carrinho já existente")
-            } else {
-                let nItem = {
-                    quantidade: qtd,
-                    produto_id: item.id
-                }
-                cart.itens.push(nItem)
-            }
+            // let resultCart = cart.itens.filter((cart_item) => {
+            //     return cart_item.produto_id == item.id
+            // })
+
+            // if (resultCart.length > 0) {
+            //     enqueueSnackbar("Vamos incrementar o item ao carrinho já existente")
+            // } else {
+            //     let nItem = {
+            //         quantidade: qtd,
+            //         produto_id: item.id
+            //     }
+            //     cart.itens.push(nItem)
+            // }
         }
 
-        if(updateCart(cart)){
-            handleChangeCart()
-        }
+        // if(updateCart(cart)){
+        //     handleChangeCart()
+        // }
     }
 
     const addItemToCart = async (qtd) => {
@@ -127,10 +143,10 @@ const ProductCard = (props) => {
                     let res = response.data
                     verifyDisponibilityToAddToCart(res.data[0])
                 } else {
-                    alert("Não foi possível encontrar o item para adicionar ao carrinho")
+                    enqueueSnackbar("Não foi possível encontrar o item para adicionar ao carrinho")
                 }
             }).catch(error => {
-                alert("Erro ao buscar item para adicionar ao carrinho")
+                enqueueSnackbar("Erro ao buscar item para adicionar ao carrinho")
             })
     }
 

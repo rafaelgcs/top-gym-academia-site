@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -15,6 +15,7 @@ import {
 import Page from 'modules/dashboard/components/Page'
 import { login } from 'services/store/auth';
 import { api } from 'services/api';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,10 +27,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginViewStore = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles();
   const navigate = useNavigate()
+  const [isSubmiting, setIsSubmiting] = useState(false)
 
   const onSubmitLoginForm = (data, ev) => {
+    setIsSubmiting(true)
     let send = data
     send.remember = true
     api.post('/auth/login/client', send).then((response) => {
@@ -40,14 +44,16 @@ const LoginViewStore = () => {
           if (login(res.data.user, res.data.access_token, res.data.expires_in, res.data.remember_user)) {
             window.location.href = '/loja'
           } else {
-            ev.resetForm()
+            enqueueSnackbar('Não foi possível efetuar o login, tente novamente mais tarde.', { variant: 'danger' })
           }
         } else {
-          ev.resetForm()
+          enqueueSnackbar('Usuário e/ou senha incorretos!.', { variant: 'warning' })
         }
       }
     }).catch((error) => {
-      ev.resetForm()
+      enqueueSnackbar('Ops! Tivemos um problema no servidor, tente novamente mais tarde.', { variant: 'danger' })
+    }).finally(() => {
+      setIsSubmiting(false)
     })
   }
 
@@ -65,8 +71,8 @@ const LoginViewStore = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'Insira seu e-mail',
-              password: 'Insira sua senha'
+              email: '',
+              password: ''
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string().email('Insira um e-mail válido').max(255).required('O campo de e-mail é obrigatório.'),
@@ -128,7 +134,7 @@ const LoginViewStore = () => {
                   <Box my={2}>
                     <Button
                       color="primary"
-                      disabled={isSubmitting}
+                      disabled={isSubmiting}
                       fullWidth
                       size="large"
                       type="submit"

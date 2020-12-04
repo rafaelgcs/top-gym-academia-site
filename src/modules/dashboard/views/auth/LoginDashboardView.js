@@ -15,6 +15,7 @@ import {
 import Page from '../../components/Page'
 import { api } from 'services/api'
 import { login } from 'services/admin/auth'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const LoginDashboardView = () => {
+    const { enqueueSnackbar } = useSnackbar()
     const classes = useStyles()
     const navigate = useNavigate()
 
@@ -38,22 +40,18 @@ const LoginDashboardView = () => {
 
                 if (res.success) {
                     if (login(res.data.user, res.data.access_token, res.data.expires_in, res.data.remember_user)) {
-                        window.location.href= '/admin'
-                    }else{
-                        ev.resetForm()
+                        window.location.href = '/admin'
+                    } else {
+                        enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
                     }
                 } else {
-                    ev.resetForm()
+                    enqueueSnackbar("Usuário e/ou senha incorretos!", { variant: 'warning' })
                 }
             }
         }).catch((error) => {
-            ev.resetForm()
+            enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
         })
-        // // ev.preventDefault()
 
-        // console.log(ev)
-        // console.log(test)
-        // // navigate('/admin', { replace: true })
     }
 
     return (
