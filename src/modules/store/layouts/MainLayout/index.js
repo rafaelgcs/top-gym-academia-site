@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { makeStyles, ThemeProvider, Zoom, useTheme, Fab } from '@material-ui/core'
 import BottomBar from './BottomBar'
@@ -12,6 +12,7 @@ import UpIcon from '@material-ui/icons/KeyboardArrowUp'
 import { green } from '@material-ui/core/colors'
 import clsx from 'clsx'
 import CartDialog from './components/Dialogs/CartDialog'
+import { getCart } from 'services/store/cart'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +58,24 @@ const StoreMainLayout = () => {
     const [openSearchDialog, setOpenSearchDialog] = useState(false)
     const [openCartDialog, setOpenCartDialog] = useState(false)
     const myTheme = useTheme(theme)
-    const [value, setValue] = React.useState(false)
+    const [value, setValue] = useState(false)
+    const [myCart, setMyCart] = useState()
+
+    const handleChangeCart = () => {
+        let cart = getCart()
+
+        if (cart == undefined || cart == null) {
+            setMyCart({
+                itens: [],
+                valor: 0.0,
+                status: 0,
+                cliente: null,
+            })
+        } else {
+            setMyCart(cart)
+        }
+        console.log(myCart)
+    }
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
@@ -106,14 +124,18 @@ const StoreMainLayout = () => {
         },
     ];
 
+    useEffect(() => {
+        handleChangeCart()
+    }, [])
+
     return (
         <ThemeProvider theme={theme} >
             <div className={classes.root}>
-                <TopBar handleCloseSearchDialog={handleCloseSearchDialog} />
+                <TopBar handleCloseSearchDialog={handleCloseSearchDialog} handleClickShowCart={handleCloseCartDialog} cart={myCart} handleChangeCart={handleChangeCart} />
                 <div className={classes.wrapper}>
                     <div className={classes.contentContainer}>
                         <div className={classes.content}>
-                            <Outlet />
+                            <Outlet handleChangeCart={handleChangeCart} />
                         </div>
                     </div>
                 </div>
@@ -133,16 +155,20 @@ const StoreMainLayout = () => {
                             </Fab>
                         </Zoom>
                     ))}
-                    <BottomBar handleCloseSearchDialog={handleCloseSearchDialog} handleClickMore={handleChangeIndex} handleClickShowCart={handleCloseCartDialog} />
+                    <BottomBar handleCloseSearchDialog={handleCloseSearchDialog} handleClickMore={handleChangeIndex} handleClickShowCart={handleCloseCartDialog} cart={myCart} handleChangeCart={handleChangeCart} />
                 </>}
                 {/* Dialogs */}
                 <SearchDialog
                     show={openSearchDialog}
                     handleClose={handleCloseSearchDialog}
+                    handleChangeCart={handleChangeCart}
+                    cart={myCart}
                 />
                 <CartDialog
                     show={openCartDialog}
                     handleClose={handleCloseCartDialog}
+                    handleChangeCart={handleChangeCart}
+                    cart={myCart}
                 />
             </div>
         </ThemeProvider>

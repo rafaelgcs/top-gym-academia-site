@@ -9,14 +9,16 @@ import {
     Hidden,
     IconButton,
     Toolbar,
-    makeStyles
+    makeStyles,
+    Button
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import SearchIcon from '@material-ui/icons/Search'
 import InputIcon from '@material-ui/icons/Input'
-import { logout } from 'services/auth'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import { logout, isAuthenticated } from 'services/store/auth'
 import Logo from 'modules/shared/components/Logo'
 
 const useStyles = makeStyles(() => ({
@@ -31,6 +33,9 @@ const useStyles = makeStyles(() => ({
 
 const TopBar = ({
     handleCloseSearchDialog,
+    handleClickShowCart,
+    cart,
+    handleChangeCart,
     className,
     onMobileNavOpen,
     ...rest
@@ -40,7 +45,7 @@ const TopBar = ({
 
     const doLogout = () => {
         if (logout()) {
-            window.location.href = "/admin/login"
+            window.location.href = "/loja"
         }
     }
 
@@ -59,17 +64,29 @@ const TopBar = ({
                     <IconButton color="inherit" onClick={handleCloseSearchDialog}>
                         <SearchIcon />
                     </IconButton>
-                    <IconButton color="inherit">
-                        <Badge
-                            badgeContent={1}
-                            color="white"
-                        >
-                            <ShoppingCartIcon />
-                        </Badge>
-                    </IconButton>
-                    <IconButton onClick={doLogout} color="inherit">
-                        <InputIcon />
-                    </IconButton>
+                    {
+                        cart && cart.itens.length > 0 &&
+                        <IconButton className="ml-2" color="inherit" onClick={handleClickShowCart}>
+                            <Badge
+                                invisible={cart.itens != null ? cart.itens.length == 0 : true}
+                                badgeContent={cart.itens != null ? cart.itens.length : 0}
+                                color="white"
+                            >
+                                <ShoppingCartIcon />
+                            </Badge>
+                        </IconButton>
+                    }
+                    {
+                        isAuthenticated() ?
+                            <IconButton className="ml-2" onClick={doLogout} color="inherit">
+                                <AccountCircleIcon />
+                            </IconButton> :
+                            <RouterLink to="/loja/login">
+                                <Button className="ml-2" color="inherit">
+                                    Login
+                                </Button>
+                            </RouterLink>
+                    }
                 </Hidden>
                 <Hidden lgUp>
                     <IconButton

@@ -23,7 +23,7 @@ import {
   Users as UsersIcon
 } from 'react-feather';
 import NavItem from './NavItem';
-import { getUser } from 'services/auth';
+import { getUser } from 'services/store/auth';
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import {
   Avatar,
   Box,
@@ -11,7 +11,7 @@ import {
   List,
   Typography,
   makeStyles
-} from '@material-ui/core';
+} from '@material-ui/core'
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
@@ -21,15 +21,15 @@ import {
   User as UserIcon,
   UserPlus as UserPlusIcon,
   Users as UsersIcon
-} from 'react-feather';
-import NavItem from './NavItem';
-import { getUser } from 'services/auth';
+} from 'react-feather'
+import NavItem from './NavItem'
+import { getUser } from 'services/admin/auth'
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
   jobTitle: 'Senior Developer',
   name: 'Katarina Smith'
-};
+}
 
 const items = [
   {
@@ -62,7 +62,7 @@ const items = [
     icon: UserIcon,
     title: 'Perfil'
   }
-];
+]
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
@@ -78,23 +78,23 @@ const useStyles = makeStyles(() => ({
     width: 64,
     height: 64
   }
-}));
+}))
 
 const NavBar = ({ onMobileClose, openMobile }) => {
-  const classes = useStyles();
-  const location = useLocation();
-  const [user, setUser] = useState({});
+  const classes = useStyles()
+  const location = useLocation()
+  const [user, setUser] = useState({})
 
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
-      onMobileClose();
+      onMobileClose()
     }
-  }, [location.pathname]);
+  }, [location.pathname])
 
   useEffect(() => {
     let nUser = getUser()
-    setUser(nUser);
+    setUser(nUser)
   }, [])
 
   const content = (
@@ -144,7 +144,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       </Box>
       <Box flexGrow={1} />
     </Box>
-  );
+  )
 
   return (
     <>
@@ -170,17 +170,17 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </Drawer>
       </Hidden>
     </>
-  );
-};
+  )
+}
 
 NavBar.propTypes = {
   onMobileClose: PropTypes.func,
   openMobile: PropTypes.bool
-};
+}
 
 NavBar.defaultProps = {
   onMobileClose: () => { },
   openMobile: false
-};
+}
 
-export default NavBar;
+export default NavBar

@@ -10,7 +10,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const SearchDialog = (props) => {
-    const { show, handleClose } = props
+    const { show, handleClose, handleChangeCart } = props
 
     const [afterSearch, setAfterSearch] = useState(false)
     const [searching, setSearching] = useState(false)
@@ -40,7 +40,7 @@ const SearchDialog = (props) => {
     }
 
     const renderProduct = (product) => {
-        return (<ProductCard product={product} />)
+        return (<ProductCard product={product} handleChangeCart={handleChangeCart} />)
     }
     return (
         <Dialog fullScreen open={show} onClose={handleClose} TransitionComponent={Transition}>
@@ -105,7 +105,7 @@ const SearchDialog = (props) => {
                     </Grid> :
                         afterSearch ? result.length > 0 ?
                             <Container>
-                                <Grid container spacing={1} alignContent="center" alignItems="center">
+                                <Grid container spacing={2} alignContent="center" alignItems="center">
                                     {
                                         result.map((item) => {
                                             return <Grid item lg={4} md={4} xs={6}> {renderProduct(item)} </Grid>

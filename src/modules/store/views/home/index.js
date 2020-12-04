@@ -111,8 +111,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const StoreHomePage = () => {
+const StoreHomePage = (props) => {
     const classes = useStyles()
+    const { handleChangeCart } = props
     const settingsSlider = {
         dots: false,
         infinite: true,
@@ -200,7 +201,7 @@ const StoreHomePage = () => {
     }
 
     const renderProduct = (product) => {
-        return (<ProductCard product={product} />)
+        return (<ProductCard product={product} handleChangeCart={() => console.log(handleChangeCart)} />)
     }
 
     useEffect(() => {
@@ -253,26 +254,25 @@ const StoreHomePage = () => {
                 </Typography>
                 <List className={classes.list}>
                     {grouped.map(({ id, produtos, nome }) => (
+                        produtos.length > 0 &&
                         <React.Fragment key={id}>
                             <ListSubheader className={classes.subheader}>{nome}</ListSubheader>
 
-                            {
-                                produtos.length > 0 &&
-                                <Container>
-                                    <Slider {...settingsSliderProds} className={classes.slider}>
-                                        {
-                                            produtos.map((prod) => {
-                                                return (
-                                                    <div style={{ padding: 5 }}>
-                                                        <Card style={{ borderRadius: 15 }} elevation={0}>
-                                                            <CardContent>{renderProduct(prod)}</CardContent>
-                                                        </Card>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                    </Slider>
-                                    {/* <Grid container spacing={1} alignContent="center" alignItems="center">
+                            <Container>
+                                <Slider {...settingsSliderProds} className={classes.slider}>
+                                    {
+                                        produtos.map((prod) => {
+                                            return (
+                                                <div style={{ padding: 5 }}>
+                                                    <Card style={{ borderRadius: 15 }} elevation={0}>
+                                                        <CardContent>{renderProduct(prod)}</CardContent>
+                                                    </Card>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </Slider>
+                                {/* <Grid container spacing={1} alignContent="center" alignItems="center">
                                         {
                                             produtos.map((prod) => {
                                                 return <Grid item lg={4} md={4} xs={6}> {renderProduct(prod)} </Grid>
@@ -289,9 +289,8 @@ const StoreHomePage = () => {
                                             // })
                                         }
                                     </Grid> */}
-                                </Container>
+                            </Container>
 
-                            }
 
                         </React.Fragment>
                     ))}

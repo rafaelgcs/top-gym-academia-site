@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import moment from 'moment';
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import moment from 'moment'
 import {
   Avatar,
   Box,
@@ -12,8 +12,8 @@ import {
   Divider,
   Typography,
   makeStyles
-} from '@material-ui/core';
-import { getUser } from 'services/auth';
+} from '@material-ui/core'
+import { getUser } from 'services/admin/auth'
 moment.locale('pt-br')
 
 const useStyles = makeStyles(() => ({
@@ -22,10 +22,10 @@ const useStyles = makeStyles(() => ({
     height: 100,
     width: 100
   }
-}));
+}))
 
 const Profile = ({ user, className, ...rest }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <Card
@@ -75,11 +75,11 @@ const Profile = ({ user, className, ...rest }) => {
         </Button>
       </CardActions> */}
     </Card>
-  );
-};
+  )
+}
 
 Profile.propTypes = {
   className: PropTypes.string
-};
+}
 
-export default Profile;
+export default Profile

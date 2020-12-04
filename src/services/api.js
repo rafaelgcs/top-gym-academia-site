@@ -1,12 +1,12 @@
-import axios from "axios";
-import { getToken, logout, refresh } from './auth';
+import axios from "axios"
+import { getToken, logout, refresh } from './admin/auth'
 
-const URL = process.env.REACT_APP_URL_API;
+const URL = process.env.REACT_APP_URL_API
 
 
 const apiInsta = axios.create({
   baseURL: "https://graph.instagram.com"
-});
+})
 
 const api = axios.create({
   baseURL: URL,
@@ -14,7 +14,7 @@ const api = axios.create({
     "Content-Type": "application/json",
     "Accept": "application/json",
   }
-});
+})
 
 const apiAuth = axios.create({
   baseURL: URL,
@@ -23,7 +23,7 @@ const apiAuth = axios.create({
     "Accept": "application/json",
     "Authorization": `Bearer ${getToken()}`
   }
-});
+})
 
 const refreshToken = async () => {
   await apiAuth.post('auth/refresh/admin').then((response) => {
@@ -37,4 +37,4 @@ const refreshToken = async () => {
   })
 }
 
-export { apiInsta, api, apiAuth, refreshToken };
+export { apiInsta, api, apiAuth, refreshToken }

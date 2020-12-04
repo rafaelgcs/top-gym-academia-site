@@ -40,10 +40,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const BottomBar = (props) => {
-    const { handleCloseSearchDialog, handleClickShowCart, handleClickMore } = props
+    const { handleCloseSearchDialog, handleClickShowCart, handleClickMore, cart, handleChangeCart } = props
     const classes = useStyles()
     const [invisibleCartBadge, setInvisibleCartBadge] = useState(false)
-    const [cart, setCart] = useState([1])
+
 
     return (
         <>
@@ -53,12 +53,12 @@ const BottomBar = (props) => {
                         <MenuIcon />
                     </IconButton>
                     {
-                        cart.length > 0 &&
-                        <Fab color="secondary" aria-label="add" className={classes.fabButton} onClick={handleClickShowCart}>
+                        cart && cart.itens.length > 0 &&
+                        <Fab color="green" aria-label="add" className={classes.fabButton} onClick={handleClickShowCart}>
                             <Badge
-                                invisible={invisibleCartBadge}
-                                badgeContent={1}
-                                color="white"
+                                invisible={cart.itens != null ? cart.itens.length == 0 : true}
+                                badgeContent={cart.itens != null ? cart.itens.length : 0}
+                                color="primary"
                             >
                                 <ShoppingCartIcon />
                             </Badge>

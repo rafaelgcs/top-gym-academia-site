@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import {
   Container,
   Grid,
   makeStyles
-} from '@material-ui/core';
-import Page from '../../../components/Page';
-import Profile from './Profile';
-import ProfileDetails from './ProfileDetails';
-import PasswordRecover from './PasswordRecover';
-import { getUser } from 'services/auth';
+} from '@material-ui/core'
+import Page from '../../../components/Page'
+import Profile from './Profile'
+import ProfileDetails from './ProfileDetails'
+import PasswordRecover from './PasswordRecover'
+import { getUser } from 'services/admin/auth'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   }
-}));
+}))
 
 const Account = () => {
-  const classes = useStyles();
+  const classes = useStyles()
   const [user, setUser] = useState({})
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const Account = () => {
         </Grid>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default Account;
+export default Account

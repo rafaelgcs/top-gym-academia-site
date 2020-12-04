@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
+import React from 'react'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
+import { Formik } from 'formik'
 import {
     Box,
     Button,
@@ -11,12 +11,10 @@ import {
     TextField,
     Typography,
     makeStyles
-} from '@material-ui/core';
-import FacebookIcon from '../../icons/Facebook';
-import GoogleIcon from '../../icons/Google';
-import Page from '../../components/Page';
-import { api } from 'services/api';
-import { login } from 'services/auth';
+} from '@material-ui/core'
+import Page from '../../components/Page'
+import { api } from 'services/api'
+import { login } from 'services/admin/auth'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,37 +23,37 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: theme.spacing(3),
         paddingTop: theme.spacing(3)
     }
-}));
+}))
 
 const LoginDashboardView = () => {
-    const classes = useStyles();
-    const navigate = useNavigate();
+    const classes = useStyles()
+    const navigate = useNavigate()
 
     const onSubmitLoginForm = (data, ev) => {
-        let send = data;
-        send.remember = true;
+        let send = data
+        send.remember = true
         api.post('/auth/login/admin', send).then((response) => {
             if (response.status === 200) {
-                let res = response.data;
+                let res = response.data
 
                 if (res.success) {
                     if (login(res.data.user, res.data.access_token, res.data.expires_in, res.data.remember_user)) {
-                        window.location.href= '/admin';
+                        window.location.href= '/admin'
                     }else{
                         ev.resetForm()
                     }
                 } else {
-                    ev.resetForm();
+                    ev.resetForm()
                 }
             }
         }).catch((error) => {
-            ev.resetForm();
+            ev.resetForm()
         })
-        // // ev.preventDefault();
+        // // ev.preventDefault()
 
         // console.log(ev)
         // console.log(test)
-        // // navigate('/admin', { replace: true });
+        // // navigate('/admin', { replace: true })
     }
 
     return (
@@ -162,7 +160,7 @@ const LoginDashboardView = () => {
                 </Container>
             </Box>
         </Page>
-    );
-};
+    )
+}
 
-export default LoginDashboardView;
+export default LoginDashboardView
