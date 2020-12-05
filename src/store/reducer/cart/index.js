@@ -50,7 +50,7 @@ export default createReducer(INITIAL_STATE, {
             if (state.itens[indexOfItem].quantidade == 0) {
                 state.itens.splice(indexOfItem, 1)
             }
-            debugger
+
             let nValue = parseFloat((parseFloat(state.valor) - parseFloat(action.payload.valor_promocional > 0 ? action.payload.valor_promocional : action.payload.valor)).toFixed(2))
             nValue = parseFloat(state.valor) - parseFloat(action.payload.valor_promocional > 0 ? action.payload.valor_promocional : action.payload.valor)
             nValue = parseFloat((parseFloat(state.valor) - parseFloat(action.payload.valor_promocional > 0 ? action.payload.valor_promocional : action.payload.valor)).toFixed(2))

@@ -79,8 +79,8 @@ const CartDialog = (props) => {
         str = str.replaceAll('.', '')
         if (!(hasDot >= 0)) {
             str = `${str}00`
-        }else if(hasOneAfter.length > 1){
-            if(hasOneAfter[hasOneAfter.length - 1].length == 1){
+        } else if (hasOneAfter.length > 1) {
+            if (hasOneAfter[hasOneAfter.length - 1].length == 1) {
                 str = `${str}0`
             }
         }
@@ -139,11 +139,21 @@ const CartDialog = (props) => {
                     <CardContent>
                         <List>
                             {
-                                cart.itens.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                                cart.itens.length == 0 &&
+                                <ListItem button>
+                                    <ListItemAvatar>
+                                        <Avatar alt="Profile Picture" src={defaultProductImage} />
+                                    </ListItemAvatar>
+                                    <ListItemText primary={`Nenhum item no carrinho!`} secondary={"Boas compras! ;)"} />
+
+                                </ListItem>
+                            }
+                            {
+                                cart.itens.map((row, index) => {
 
                                     return (
                                         <Grid container lg={12} md={12} xs={12}>
-                                            <Grid item lg={8} md={8} xs={8}>
+                                            <Grid item lg={8} md={8} xs={11}>
                                                 <ListItem button key={row.produto.id}>
                                                     <ListItemAvatar>
                                                         <Avatar alt="Profile Picture" src={row.produto.images.length > 0 ? row.produto.images[0].image_url : defaultProductImage} />
@@ -152,8 +162,8 @@ const CartDialog = (props) => {
 
                                                 </ListItem>
                                             </Grid>
-                                            <Grid item lg={4} md={4} xs={4}>
-                                                <Grid container alignContent="flex-end" alignItems="flex-end" >
+                                            <Grid item lg={4} md={4} xs={1}>
+                                                <Grid container alignContent="center" alignItems="center" >
                                                     <Grid item lg={4} md={4} xs={4} >
                                                         <Fab size="small" onClick={() => handleClickAddItem(row.produto)}>+</Fab>
                                                         <Fab size="small" onClick={() => handleClickSubItem(row.produto)}>-</Fab>

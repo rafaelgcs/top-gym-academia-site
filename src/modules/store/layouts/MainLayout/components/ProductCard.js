@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductCard = (props) => {
     const { enqueueSnackbar } = useSnackbar()
+
     const classes = useStyles()
     const { product, handleChangeCart, addItemCart } = props
     const [expanded, setExpanded] = useState(false)
@@ -82,8 +83,8 @@ const ProductCard = (props) => {
         str = str.replaceAll('.', '')
         if (!(hasDot >= 0)) {
             str = `${str}00`
-        }else if(hasOneAfter.length > 1){
-            if(hasOneAfter[hasOneAfter.length - 1].length == 1){
+        } else if (hasOneAfter.length > 1) {
+            if (hasOneAfter[hasOneAfter.length - 1].length == 1) {
                 str = `${str}0`
             }
         }
@@ -100,40 +101,12 @@ const ProductCard = (props) => {
     }
 
     const verifyDisponibilityToAddToCart = (item, qtd = 1) => {
-        let cart = getCart()
-        if (cart == null) {
-            cart = {
-                itens: [],
-                valor: 0.0,
-                status: 0,
-                cliente: null,
-            }
-        }
         if (item.estoque.quantidade_disponivel == 0) {
-            enqueueSnackbar("O item não está mais em estoque! Tente outro... :(")
+            enqueueSnackbar("O item não está mais em estoque! Tente outro... :(", { variant: 'warning' })
         } else {
             addItemCart(item)
-            enqueueSnackbar("Produto inserido no carrinho ;)")
-            
-
-            // let resultCart = cart.itens.filter((cart_item) => {
-            //     return cart_item.produto_id == item.id
-            // })
-
-            // if (resultCart.length > 0) {
-            //     enqueueSnackbar("Vamos incrementar o item ao carrinho já existente")
-            // } else {
-            //     let nItem = {
-            //         quantidade: qtd,
-            //         produto_id: item.id
-            //     }
-            //     cart.itens.push(nItem)
-            // }
         }
 
-        // if(updateCart(cart)){
-        //     handleChangeCart()
-        // }
     }
 
     const addItemToCart = async (qtd) => {

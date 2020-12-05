@@ -4,15 +4,18 @@ import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
 import { apiAuth } from 'services/api';
 import ProductCard from '../ProductCard';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from 'store/reducer/cart'
+import { useSnackbar } from 'notistack';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const SearchDialog = (props) => {
+    const { enqueueSnackbar } = useSnackbar()
     const dispatch = useDispatch()
+    const cart = useSelector(state => state.cart)
     const { show, handleClose, handleChangeCart } = props
 
     const [afterSearch, setAfterSearch] = useState(false)
@@ -38,12 +41,25 @@ const SearchDialog = (props) => {
         })
     }
 
-    const handleChange = (ev) => {
+    const addItemCart = (product_item) => {
+        let indexOfItem = null;
+        cart.itens.map((item, index) => {
+            if (item.produto_id == product_item.id) {
+                indexOfItem = index
+            }
+        })
 
-    }
-
-    const addItemCart = (item) => {
-        dispatch(addItem(item))
+        if (indexOfItem != null) {
+            if (cart.itens[indexOfItem].quantidade <= product_item.estoque.quantidade_disponivel - 1) {
+                dispatch(addItem(product_item))
+                enqueueSnackbar("Produto inserido no carrinho ;)", { variant: "success" })
+            } else {
+                enqueueSnackbar("Infelizmente não temos mais este item em estoque... :(", { variant: "danger" })
+            }
+        } else {
+            dispatch(addItem(product_item))
+            enqueueSnackbar("Produto inserido no carrinho ;)", { variant: "success" })
+        }
     }
 
     const renderProduct = (product) => {
