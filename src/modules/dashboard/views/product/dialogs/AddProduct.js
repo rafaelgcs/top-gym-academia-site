@@ -13,6 +13,8 @@ import {
 import { apiAuth, refreshToken } from 'services/api'
 import { Dropzone } from 'modules/shared/components/Dropzone'
 import { useSnackbar } from 'notistack'
+import EditorJs from 'react-editor-js'
+import { EDITOR_JS_TOOLS } from 'modules/shared/tools/editorJS'
 
 const AddProductDialog = (props) => {
     const { enqueueSnackbar } = useSnackbar()
@@ -22,7 +24,7 @@ const AddProductDialog = (props) => {
     const extensionsAccepted = ['png', 'jpg', 'jpeg', 'gif']
     const [qtdTotal, setQtdTotal] = useState(0)
     const [qtdDisponivel, setQtdDisponivel] = useState(0)
-
+    const [descricaoData, setDescricaoData] = useState()
     const [newProduct, setNewProduct] = useState({
         nome: null,
         apelido: null,
@@ -62,7 +64,9 @@ const AddProductDialog = (props) => {
 
     const onSubmitForm = () => {
         if (verifyInputs()) {
-            apiAuth.post('/product', newProduct).then(response => {
+            let prod = newProduct
+            prod.descricao = JSON.stringify(descricaoData)
+            apiAuth.post('/product', prod).then(response => {
                 updateStock(response.data)
             }).catch(error => {
                 enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
@@ -446,7 +450,18 @@ const AddProductDialog = (props) => {
                         />
 
                     </Grid>
+                    <Grid item md={12} xs={12}>
+                        <p>Detalhes Completos</p>
+                        <p><small>Clique em qualquer epaço abaixo e monte a descrição da melhor forma possível.</small></p>
+                    </Grid>
+                    <Grid
+                        item
+                        md={12}
+                        xs={12}>
+                        <EditorJs data={descricaoData} tools={EDITOR_JS_TOOLS} onChange={(ev, data) => setDescricaoData(data)} />
+                    </Grid>
                 </Grid>
+
             </DialogContent>
             <DialogActions>
 

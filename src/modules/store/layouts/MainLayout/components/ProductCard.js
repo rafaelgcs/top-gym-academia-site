@@ -10,6 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { api } from 'services/api'
 import { getCart, updateCart } from 'services/store/cart'
 import { useSnackbar } from 'notistack'
+import { Link } from 'react-router-dom'
 
 const defaultProductImage = require('../../../../shared/assets/img/default-product.png')
 const useStyles = makeStyles((theme) => ({
@@ -67,7 +68,7 @@ const ProductCard = (props) => {
     const { enqueueSnackbar } = useSnackbar()
 
     const classes = useStyles()
-    const { product, handleChangeCart, addItemCart } = props
+    const { product, handleClose, addItemCart } = props
     const [expanded, setExpanded] = useState(false)
 
     const handleExpandClick = () => {
@@ -92,8 +93,8 @@ const ProductCard = (props) => {
     }
 
     const getTitle = (title) => {
-        if (title.length > 17) {
-            let str = `${title.slice(0, 16)}...`
+        if (title.length > 25) {
+            let str = `${title.slice(0, 24)}...`
             return str
         } else {
             return title
@@ -128,22 +129,16 @@ const ProductCard = (props) => {
             <Fab className={classes.iconCart} color="white" onClick={addItemToCart}>
                 <AddShoppingCartIcon />
             </Fab>
-            <div className={clsx([classes.root])}>
-                <div className={classes.media} style={{ minHeight: 120, backgroundImage: `url(${product.images.length > 0 ? product.images[0].image_url : defaultProductImage})` }}>
-
-                    {/* <IconButton className={classes.iconCart} color="white" aria-label="settings">
-                        <AddShoppingCartIcon />
-                    </IconButton> */}
+            <Link to={`/loja/product/${product.apelido}`} onClick={handleClose}>
+                <div className={clsx([classes.root])}>
+                    <div className={classes.media} style={{ minHeight: 120, backgroundImage: `url(${product.images.length > 0 ? product.images[0].image_url : defaultProductImage})` }} />
                 </div>
-            </div>
+            </Link>
             <div className={classes.content}>
                 <Grid container>
-                    <Grid item lg={9} md={9} sx={9}>
+                    <Grid item lg={12} md={12} sx={12}>
                         <p className={classes.title}>{getTitle(product.nome)}</p>
                         <p><strong><small className={classes.price}>{getPrice(product.valor, product.valor_promocional)}</small></strong></p>
-                    </Grid>
-                    <Grid item lg={3} md={3} sx={3}>
-
                     </Grid>
                 </Grid>
             </div>

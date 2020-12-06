@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 import { makeStyles, ThemeProvider, Zoom, useTheme, Fab } from '@material-ui/core'
 import BottomBar from './BottomBar'
 import { useMediaQuery } from 'react-responsive'
@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 const StoreMainLayout = () => {
     const { enqueueSnackbar } = useSnackbar()
+    const { isCheckout } = useParams()
     const classes = useStyles()
     const [openSearchDialog, setOpenSearchDialog] = useState(false)
     const [openCartDialog, setOpenCartDialog] = useState(false)
@@ -104,6 +105,13 @@ const StoreMainLayout = () => {
             label: 'Expand',
         },
     ];
+
+    useEffect(() => {
+        console.log(isCheckout)
+        // if (isCheckout) {
+        //     handleCloseCartDialog()
+        // }
+    }, [])
 
     return (
         <ThemeProvider theme={theme} >

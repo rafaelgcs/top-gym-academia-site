@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   }
-}));
+}))
 
 const LoginViewStore = () => {
   const { enqueueSnackbar } = useSnackbar()

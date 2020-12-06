@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Dinero from 'dinero.js'
 import { useSnackbar } from 'notistack';
 import { api } from 'services/api';
+import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 const defaultProductImage = require('modules/shared/assets/img/default-product.png')
 
@@ -21,7 +22,9 @@ const useStyles = makeStyles((theme) => ({
             theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.background.paper,
     },
     section: {
-        padding: '70px 0',
+        // padding: '70px 0',
+        paddingTop: 35,
+        paddingBottom: 35,
         position: 'relative',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.background.paper,
@@ -34,13 +37,18 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 25,
         minHeight: 32,
         textDecoration: 'none'
+    },
+    slider: {
+        backgroundColor:
+            theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.background.paper,
+        maxWidth: '80%',
+        borderRadius: 15
     }
-
 }));
 
-const SectionPricing = (props) => {
+const SectionStartDetail = (props) => {
     const { enqueueSnackbar } = useSnackbar()
-    const classes = useStyles();
+    const classes = useStyles()
     const { item, addItemCart } = props
     const getPrice = (valor, valor_p = 0) => {
         let str = (valor_p > 0 ? valor_p : valor).toString()
@@ -57,6 +65,43 @@ const SectionPricing = (props) => {
             }
         }
         return (Dinero({ amount: parseInt(str), currency: 'BRL' }).toFormat('$0.00')).replace('.', ',')
+    }
+    const settingSliderTop = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        nextArrow: <div style={{ display: 'none' }} />,
+        prevArrow: <div style={{ display: 'none' }} />,
+        initialSlide: 0,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: false
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
     }
 
     const verifyDisponibilityToAddToCart = (item, qtd = 1) => {
@@ -88,14 +133,27 @@ const SectionPricing = (props) => {
                 <Container maxWidth="lg" component="main" className={classes.bg}>
                     <Row>
                         <Col md={6}>
+                            <Slider {...settingSliderTop} className={classes.slider}>
+                                {
+                                    item.images.length > 0 ?
+                                        item.images.map((image) => (
+                                            <div style={{ overflow: 'hidden', borderRadius: 100 }}>
+                                                <img alt="product_image" className="d-none d-md-block" width="100%" src={image.image_url} />
+                                            </div>
+                                        ))
+                                        :
+                                        <img alt="product_image" className="d-none d-md-block" style={{ overflow: 'hidden', borderRadius: 15 }} width="80%" src={defaultProductImage} />
+                                }
+                            </Slider>
+                        </Col>
+                        <Col md={6}>
                             <h2 style={{ fontSize: 28, marginBottom: -25 }}>#{item.categoria.nome}</h2>
-                            <Link to={`/loja/product/${item.apelido}`}>
-                                <h2 className={classes.title} style={{ fontSize: 60 }}>{item.nome}</h2>
-                            </Link>
+
+                            <h2 className={classes.title} style={{ fontSize: 60 }}>{item.nome}</h2>
                             <h2 className={classes.title} style={{ fontSize: 70 }}><span className={classes.distakedText}>{getPrice(item.valor, item.valor_promocional)}</span></h2>
-                            <Link to={`/loja/product/${item.apelido}`}>
-                                <div className="d-block d-md-none mb-2" style={{ height: 200, backgroundImage: `url(${item.images.length > 0 ? item.images[0].image_url : defaultProductImage})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: 15 }} />
-                            </Link>
+                            <div className="d-block d-md-none mb-2" style={{ height: 200, backgroundImage: `url(${item.images.length > 0 ? item.images[0].image_url : defaultProductImage})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: 15 }}>
+
+                            </div>
                             <Grid lg={5} md={5} xs={12}>
                                 <RSButton
                                     style={{ padding: '40 15', width: '100%' }}
@@ -107,16 +165,12 @@ const SectionPricing = (props) => {
                                 </RSButton>
                             </Grid>
                         </Col>
-                        <Col md={6}>
-                            <Link to={`/loja/product/${item.apelido}`}>
-                                <img alt="product_image" className="d-none d-md-block" style={{ overflow: 'hidden', borderRadius: 15 }} width="80%" src={item.images.length > 0 ? item.images[0].image_url : defaultProductImage} />
-                            </Link>
-                        </Col>
                     </Row>
                 </Container>
             </div>
+
         </React.Fragment>
     );
 }
 
-export default SectionPricing;
+export default SectionStartDetail;

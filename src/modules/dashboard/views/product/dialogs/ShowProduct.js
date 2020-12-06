@@ -19,6 +19,8 @@ import { Dropzone } from 'modules/shared/components/Dropzone'
 import '../styles/hideArrowsSlider.css'
 import Slider from 'react-slick'
 import { useSnackbar } from 'notistack'
+import EditorJs from 'react-editor-js'
+import { EDITOR_JS_TOOLS } from 'modules/shared/tools/editorJS'
 
 const defaultProductImage = require('../../../../shared/assets/img/default-product.png')
 
@@ -64,6 +66,7 @@ const ShowProductDialog = (props) => {
     const [categories, setCategories] = useState([])
     const [files, setFiles] = useState([])
     const [qtdTotal, setQtdTotal] = useState(0)
+    const [descricaoData, setDescricaoData] = useState()
     const [qtdDisponivel, setQtdDisponivel] = useState(0)
     const extensionsAccepted = ['png', 'jpg', 'jpeg', 'gif']
 
@@ -105,7 +108,9 @@ const ShowProductDialog = (props) => {
     // }
 
     const onSubmitForm = () => {
-        apiAuth.put(`/product/${product.id}`, newProduct).then(response => {
+        let nProd = newProduct
+        nProd.descricao = descricaoData
+        apiAuth.put(`/product/${product.id}`, nProd).then(response => {
             updateStock(response.data)
         }).catch(error => {
             enqueueSnackbar("Aconteceu um erro, tente novamente mais tarde!", { variant: 'danger' })
@@ -195,6 +200,11 @@ const ShowProductDialog = (props) => {
             largura: product.largura,
             profundidade: product.profundidade
         })
+        if(product.descricao) {
+            setDescricaoData(JSON.parse(product.descricao))
+        }else{
+            setDescricaoData({})
+        }
         if (product.estoque) {
             setQtdDisponivel(product.estoque.quantidade_disponivel)
             setQtdTotal(product.estoque.quantidade_total)
@@ -529,6 +539,16 @@ const ShowProductDialog = (props) => {
                             onChange={(selectedFiles) => setFiles(selectedFiles)}
                         />
 
+                    </Grid>
+                    <Grid item md={12} xs={12}>
+                        <p>Detalhes Completos</p>
+                        <p><small>Clique em qualquer epaço abaixo e monte a descrição da melhor forma possível.</small></p>
+                    </Grid>
+                    <Grid
+                        item
+                        md={12}
+                        xs={12}>
+                        <EditorJs data={descricaoData} tools={EDITOR_JS_TOOLS} onChange={(ev, data) => setDescricaoData(data)} />
                     </Grid>
                 </Grid>
             </DialogContent>

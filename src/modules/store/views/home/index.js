@@ -26,6 +26,10 @@ import ProductCard from 'modules/store/layouts/MainLayout/components/ProductCard
 import { Card, CardContent, Container, Grid } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { addItem } from 'store/reducer/cart'
+import CardMinProduct from 'modules/store/components/Skeletons/card_min_product';
+import { Skeleton } from '@material-ui/lab';
+import SectionPrice from 'modules/store/components/Skeletons/section_price';
+import { useSnackbar } from 'notistack';
 
 const defaultProductImage = require('modules/shared/assets/img/default-product.png')
 
@@ -67,7 +71,25 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const skeletons = {
+    pricing: [
+        1
+    ],
+    grouping: [
+        {
+            itens: [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        }
+    ]
+}
+
 const StoreHomePage = (props) => {
+    const { enqueueSnackbar } = useSnackbar()
     const dispatch = useDispatch()
     const classes = useStyles()
     const myLocation = useLocation()
@@ -160,8 +182,8 @@ const StoreHomePage = (props) => {
         str = str.replaceAll('.', '')
         if (!(hasDot >= 0)) {
             str = `${str}00`
-        }else if(hasOneAfter.length > 1){
-            if(hasOneAfter[hasOneAfter.length - 1].length == 1){
+        } else if (hasOneAfter.length > 1) {
+            if (hasOneAfter[hasOneAfter.length - 1].length == 1) {
                 str = `${str}0`
             }
         }
@@ -170,6 +192,7 @@ const StoreHomePage = (props) => {
 
     const addItemCart = (item) => {
         dispatch(addItem(item))
+        enqueueSnackbar("Produto inserido ao carrinho ;)", { variant: 'success' })
     }
 
     const renderProduct = (product) => {
@@ -211,40 +234,66 @@ const StoreHomePage = (props) => {
     return (
         <React.Fragment>
             <CssBaseline />
-            {
-                featured.length > 0 && <Slider {...settingsSlider} className={classes.slider}>
-                    {
+            <Slider {...settingsSlider} className={classes.slider}>
+                {
+                    featured.length > 0 ?
                         featured.map((item) => {
-                            return <SectionPricing item={item} />
+                            return <SectionPricing item={item} addItemCart={addItemCart} />
+                        }) :
+                        skeletons.pricing.map(() => {
+                            return <SectionPrice />
                         })
-                    }
-                </Slider>
-            }
+                }
+            </Slider>
             <Paper square className={classes.paper}>
                 <Typography className={classes.text} variant="h2" gutterBottom>
                     Nossa Loja
                 </Typography>
                 <List className={classes.list}>
-                    {grouped.map(({ id, produtos, nome }) => (
-                        produtos.length > 0 &&
-                        <React.Fragment key={id}>
-                            <ListSubheader className={classes.subheader}>{nome}</ListSubheader>
+                    {
+                        grouped.length == 0 && skeletons.grouping.map(({ itens }, index) => (
+                            <React.Fragment key={index}>
+                                <ListSubheader className={classes.subheader}><Skeleton /></ListSubheader>
+                                <Container>
+                                    <Slider {...settingsSliderProds} className={classes.slider}>
+                                        {
 
-                            <Container>
-                                <Slider {...settingsSliderProds} className={classes.slider}>
-                                    {
-                                        produtos.map((prod) => {
-                                            return (
-                                                <div style={{ padding: 5 }}>
-                                                    <Card style={{ borderRadius: 15 }} elevation={0}>
-                                                        <CardContent>{renderProduct(prod)}</CardContent>
-                                                    </Card>
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </Slider>
-                                {/* <Grid container spacing={1} alignContent="center" alignItems="center">
+                                            itens.map((i, indexP) => {
+                                                return (
+                                                    <div key={indexP} style={{ padding: 5 }}>
+                                                        <Card style={{ borderRadius: 15 }} elevation={0}>
+                                                            <CardContent><CardMinProduct /></CardContent>
+                                                        </Card>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </Slider>
+                                </Container>
+                            </React.Fragment>
+                        ))
+                    }
+                    {
+                        grouped.map(({ id, produtos, nome }) => (
+                            produtos.length > 0 &&
+                            <React.Fragment key={id}>
+                                <ListSubheader className={classes.subheader}>{nome}</ListSubheader>
+
+                                <Container>
+                                    <Slider {...settingsSliderProds} className={classes.slider}>
+                                        {
+                                            produtos.map((prod) => {
+                                                return (
+                                                    <div style={{ padding: 5 }}>
+                                                        <Card style={{ borderRadius: 15 }} elevation={0}>
+                                                            <CardContent>{renderProduct(prod)}</CardContent>
+                                                        </Card>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </Slider>
+                                    {/* <Grid container spacing={1} alignContent="center" alignItems="center">
                                         {
                                             produtos.map((prod) => {
                                                 return <Grid item lg={4} md={4} xs={6}> {renderProduct(prod)} </Grid>
@@ -261,11 +310,11 @@ const StoreHomePage = (props) => {
                                             // })
                                         }
                                     </Grid> */}
-                            </Container>
+                                </Container>
 
 
-                        </React.Fragment>
-                    ))}
+                            </React.Fragment>
+                        ))}
                 </List>
             </Paper>
         </React.Fragment >

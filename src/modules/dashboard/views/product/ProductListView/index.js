@@ -151,7 +151,7 @@ const ProductList = () => {
       <Container maxWidth={false}>
         <Toolbar searchProduct={searchProduct} handleChange={handleChangeSearchProduct} handleCloseAddProduto={handleCloseAddProduto} />
         {
-          filtered.length > 0 && <Box
+          filtered.length > 0 && !loading && <Box
             mt={3}
             display="flex"
             justifyContent="center"
@@ -213,7 +213,7 @@ const ProductList = () => {
           </Grid>
         </Box>
         {
-          filtered.length > 0 && <Box
+          filtered.length > 0 && !loading && <Box
             mt={3}
             display="flex"
             justifyContent="center"

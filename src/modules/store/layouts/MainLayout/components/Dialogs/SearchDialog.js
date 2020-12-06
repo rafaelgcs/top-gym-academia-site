@@ -63,7 +63,7 @@ const SearchDialog = (props) => {
     }
 
     const renderProduct = (product) => {
-        return (<ProductCard product={product} addItemCart={addItemCart} handleChangeCart={handleChangeCart} />)
+        return (<ProductCard product={product} addItemCart={addItemCart} handleClose={handleClose} />)
     }
     return (
         <Dialog fullScreen open={show} onClose={handleClose} TransitionComponent={Transition}>

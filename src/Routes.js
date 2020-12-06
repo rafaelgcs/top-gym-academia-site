@@ -29,6 +29,8 @@ import StoreHomePage from 'modules/store/views/home'
 import StoreMainLayout from 'modules/store/layouts/MainLayout'
 import LoginViewStore from 'modules/store/views/auth/LoginView'
 import RegisterViewStore from 'modules/store/views/auth/RegisterView'
+import ProductDetail from 'modules/store/views/product/product_detail'
+import CheckoutCartView from 'modules/store/views/checkout/cart/checkout_cart'
 
 const routes = [
     { path: 'admin/login', element: adminAuthenticated() ? <Navigate to="/admin" /> : <LoginDashboardView /> },
@@ -52,6 +54,8 @@ const routes = [
         element: <StoreMainLayout />,
         children: [
             { path: '', element: <StoreHomePage /> },
+            { path: 'checkout', element: <CheckoutCartView /> },
+            { path: 'product/:apelido', element: <ProductDetail /> },
             { path: 'login', element: storeAuthenticated() ? <Navigate to="/loja" /> : <LoginViewStore /> },
             { path: 'register', element: storeAuthenticated() ? <Navigate to="/loja" /> : <RegisterViewStore /> },
             { path: '404', element: <NotFoundView /> },
